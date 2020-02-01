@@ -15,13 +15,18 @@ const App = (props) => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName,
 
+    if (persons.map((person) => person.name.toUpperCase()).includes(newName.toUpperCase())) {
+      window.alert(`${newName} is already added to phonebook`)
+    } else {
+
+      const personObject = {
+        name: newName,
+      }
+
+      setPersons(persons.concat(personObject))
+      setNewName('')
     }
-
-    setPersons(persons.concat(personObject))
-    setNewName('')
   }
 
   const handlePersonChange = (event) => {
@@ -30,21 +35,16 @@ const App = (props) => {
 
 
   return (
-
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
-        <div>
-          name:  <input value={newName} onChange={handlePersonChange} />
-        </div>
+        name:  <input value={newName} onChange={handlePersonChange} />
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <ul>
       {rows()}
-      </ul>
     </div>
   )
 
