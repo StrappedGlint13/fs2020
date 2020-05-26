@@ -37,17 +37,12 @@ const Countries = props => {
     return(
     <div>
       <p>
-        {filteredNames.map(country => <p key={country.name}> {country.name} </p> 
+        {filteredNames.map(country => <p key={country.name}> {country.name}
+          <button onClick={(event) => {props.handleClick(country.name)}}> show </button> </p> 
         )}
       </p>
       </div>
        )
-  } else if(filteredNames.length === 0 || filteredNames.isEmpty()) {
-    return(
-      <div>
-        <p>No matches</p>
-      </div>
-    )
   }
 }
 
@@ -70,11 +65,15 @@ const handleFilterChange = (event) => {
   setFilter(event.target.value)
 }
 
+const handleClick = (name) => {
+  setFilter(name)
+}
+
 
   return (
     <div>
       <Filter filter={filter} handle={handleFilterChange} />
-      <Countries countries={countries} filter={filter} />
+      <Countries countries={countries} filter={filter} handleClick={handleClick}  />
     </div>
   )
 }
