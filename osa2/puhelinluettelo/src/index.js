@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import Person from './components/Person'
 import axios from 'axios'
 
-
 const Persons = props => 
       <p>
         {props.persons.map((person, i) => <Person key={i} person={person} /> 
@@ -54,14 +53,22 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     } else {
-      const personObjet = {
+      const personObject = {
         name: newName,
         number: newNumber,
       }
-      setPersons(persons.concat(personObjet))
+
+      
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+      setPersons(persons.concat(response.data))
       setNewName('')
       setNewNumber('')
-    }
+    })
+
+      
+  }
   
   }
 
