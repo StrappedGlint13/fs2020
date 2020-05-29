@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Notification from './components/Notification'
+import Error from './components/Error'
 import personService from './personService/persons'
 import './index.css'
 
@@ -14,6 +15,7 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ filter, setFilter] = useState('')
   const [ message, setMessage] = useState()
+  const [ error, setError ] = useState()
 
   const personObject = {
     name: newName,
@@ -83,13 +85,14 @@ const App = () => {
         .remove(id)
         .then(
         setPersons(persons.filter(person => person.id !== id))   
-    )
+    ).then()
+
     .catch(error => {
-        setMessage(
-          `the person'${person.name}' was already deleted from server`
+        setError(
+          `Information of ${person.name} was already deleted from server`
         )
         setTimeout(() => {
-          setMessage(null)
+          setError(null)
           }, 5000) 
         setPersons(persons.filter(n => n.id !== id))     
       })
@@ -99,6 +102,7 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
         }, 5000)
+      
 }
 
 }
@@ -122,6 +126,7 @@ const App = () => {
     <div>
       <h2> Phonebook </h2>
       <Notification message={message} />
+      <Error error={error} />
       <Filter filter={filter} handle={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm addnew={addNew} handle1={handlePersonChange}
