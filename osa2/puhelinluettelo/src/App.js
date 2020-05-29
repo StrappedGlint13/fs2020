@@ -9,7 +9,7 @@ const Persons = props =>
         />
         )}
       </div>
-  
+
 const Filter = (props) => 
     <div>
       filter shown with <input value={props.filter} onChange={props.handle} />
@@ -29,13 +29,17 @@ const PersonForm = (props) =>
       <button type="submit">add</button>
     </div>
     </form>
-    
+
 
 const App = () => {
   const [ persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ filter, setFilter] = useState('')
+  const personObject = {
+    name: newName,
+    number: newNumber,
+  }
 
   useEffect(() => {      
     personService      
@@ -44,19 +48,25 @@ const App = () => {
         console.log('promise fulfilled')        
         setPersons(response)      })  }, [])  
         console.log('render', persons.length, 'persons')
-  
+
 
   const addNew = (event) => {
     if (persons.map((person) => person.name.toUpperCase()).includes(newName.toUpperCase())) {
-      window.alert(`${newName} is already added to phonebook`)
-      setNewName('')
-      setNewNumber('')
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-      }
+      const per = persons.find(n => n.name.toUpperCase() === newName.toUpperCase())
+      const changedPer = {...per}
 
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        personService
+        .update(changedPer.id, personObject)
+        .then(returnedPer => {
+        setPersons(persons.map(n => n.id !== returnedPer.id ? per : returnedPer))
+      })
+      .catch(error=> {
+        alert(`failed`)
+        setPersons(persons.filter(n => n.id !== changedPer.id))
+      })
+    }
+    } else {
       personService
       .create(personObject)
       .then(response => {
@@ -64,10 +74,9 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     })
-
-      
   }
-  
+
+
   }
 
   const removePerson = (id) => {
@@ -85,9 +94,9 @@ const App = () => {
         )
         setPersons(persons.filter(n => n.id !== id))     
       })
-   
+
 }
-    
+
 }
 
 
@@ -102,7 +111,7 @@ const App = () => {
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
   }
-
+  
   const filteredNames = persons.filter(person => person.name.toUpperCase().includes(filter.toUpperCase()))
 
   return (
@@ -120,4 +129,4 @@ const App = () => {
 
 }
 
-export default App 
+export default App
