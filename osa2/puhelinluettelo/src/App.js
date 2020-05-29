@@ -1,34 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Person from './components/Person'
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import personService from './personService/persons'
+import './index.css'
 
-const Persons = props => 
-      <div>
-        {props.persons.map((person, i) => <Person key={i} name={person.name} number={person.number}
-        removePerson={() => props.removePerson(person.id)}
-        />
-        )}
-      </div>
-
-const Filter = (props) => 
-    <div>
-      filter shown with <input value={props.filter} onChange={props.handle} />
-    </div>
-
-const PersonForm = (props) =>
-    <form onSubmit={props.addnew}>
-    <div>
-      name: <input value={props.newname}
-      onChange={props.handle1} />
-    </div>
-    <div>
-      number: <input value={props.newnumber}
-      onChange={props.handle2} />
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-    </form>
 
 
 const App = () => {
@@ -36,6 +13,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ filter, setFilter] = useState('')
+  const [ message, setMessage] = useState()
+
   const personObject = {
     name: newName,
     number: newNumber,
@@ -60,9 +39,20 @@ const App = () => {
         .update(changedPer.id, personObject)
         .then(returnedPer => {
         setPersons(persons.map(n => n.id !== returnedPer.id ? per : returnedPer))
+        setMessage(
+          `Number changed successfully`
+        )
+        setTimeout(() => {
+          setMessage(null)
+          }, 5000) 
       })
       .catch(error=> {
-        alert(`failed`)
+        setMessage(
+          'Error occurred'
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         setPersons(persons.filter(n => n.id !== changedPer.id))
       })
     }
@@ -73,6 +63,12 @@ const App = () => {
       setPersons(persons.concat(response))
       setNewName('')
       setNewNumber('')
+      setMessage(
+        `Added ${personObject.name}`
+      )
+      setTimeout(() => {
+        setMessage(null)
+        }, 5000)     
     })
   }
 
@@ -86,15 +82,23 @@ const App = () => {
         personService
         .remove(id)
         .then(
-        setPersons(persons.filter(person => person.id !== id))
+        setPersons(persons.filter(person => person.id !== id))   
     )
     .catch(error => {
-        alert(
+        setMessage(
           `the person'${person.name}' was already deleted from server`
         )
+        setTimeout(() => {
+          setMessage(null)
+          }, 5000) 
         setPersons(persons.filter(n => n.id !== id))     
       })
-
+      setMessage(
+        `Removed ${person.name}`
+      )
+      setTimeout(() => {
+        setMessage(null)
+        }, 5000)
 }
 
 }
@@ -117,6 +121,7 @@ const App = () => {
   return (
     <div>
       <h2> Phonebook </h2>
+      <Notification message={message} />
       <Filter filter={filter} handle={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm addnew={addNew} handle1={handlePersonChange}
