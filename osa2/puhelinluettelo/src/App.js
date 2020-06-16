@@ -32,6 +32,8 @@ const App = () => {
 
 
   const addNew = (event) => {
+    event.preventDefault()
+    
     if (persons.map((person) => person.name.toUpperCase()).includes(newName.toUpperCase())) {
       const per = persons.find(n => n.name.toUpperCase() === newName.toUpperCase())
       const changedPer = {...per}
