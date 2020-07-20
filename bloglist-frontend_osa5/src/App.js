@@ -3,6 +3,9 @@ import Blog from './components/Blog'
 import blogService from './services/blogService'
 import loginService from './services/loginService'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+import Error from './components/Error.js'
+import './App.css'
 
 
 const App = () => {
@@ -13,7 +16,8 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -41,12 +45,19 @@ const App = () => {
 
     blogService
     .create(blogObject)
+
+      
     .then(res => {
       setBlogs(blogs.concat(res))
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
+      setMessage(`a new blog '${blogObject.title}' added`)
+      setTimeout(()=> {
+        setMessage(null)
+      }, 5000)
     })
+    
   }
 
   const handleLogin = async (event) => {    
@@ -64,10 +75,14 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setMessage(`Welcome ${user.username}`)
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setError('invalid username or password')
+      setTimeout(() => {
+        setMessage(null)
       }, 5000)
     }
   }
@@ -92,6 +107,7 @@ const App = () => {
   if (user === null) {
       return (
         <div>
+          <Error error={error} />
           <h2>Log in to application</h2>
           <form onSubmit={handleLogin}>
         <div>
@@ -122,9 +138,10 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} />
       {user.name} logged in
       <button onClick={()=>handleLogout()}>logout</button> 
-      <br></br><br></br>
+      <br></br>
       <h2>create new</h2>
       <BlogForm addBlog={addBlog} newTitle={newTitle} 
       newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
