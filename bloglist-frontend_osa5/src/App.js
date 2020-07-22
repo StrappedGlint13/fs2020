@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogService'
 import loginService from './services/loginService'
@@ -16,6 +16,7 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
+  const blogFormRef= useRef()
 
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(null)
@@ -43,6 +44,8 @@ const App = () => {
       author: newAuthor,
       url: newUrl,
     }
+
+    blogFormRef.current.toggleVisibility()
 
     blogService
     .create(blogObject)
@@ -144,7 +147,7 @@ const App = () => {
       <button onClick={()=>handleLogout()}>logout</button> 
       <br></br>
       <h2>create new</h2>
-      <Togglable buttonLabel='new note'>
+      <Togglable buttonLabel='new note' ref={blogFormRef}>
       <BlogForm addBlog={addBlog} newTitle={newTitle} 
       newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
       handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
