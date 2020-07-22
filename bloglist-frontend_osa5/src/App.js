@@ -6,6 +6,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error.js'
 import './App.css'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -143,9 +144,11 @@ const App = () => {
       <button onClick={()=>handleLogout()}>logout</button> 
       <br></br>
       <h2>create new</h2>
+      <Togglable buttonLabel='new note'>
       <BlogForm addBlog={addBlog} newTitle={newTitle} 
       newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
       handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
