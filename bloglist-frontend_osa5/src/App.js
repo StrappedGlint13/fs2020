@@ -43,6 +43,7 @@ const App = () => {
       title: newTitle,
       author: newAuthor,
       url: newUrl,
+      likes: 44
     }
 
     blogFormRef.current.toggleVisibility()
@@ -91,6 +92,25 @@ const App = () => {
     }
   }
 
+  const addLike = (id) => {
+    const blog = blogs.find(n => n.id === id)
+    const changedBlog = {...blog, likes: blog.likes + 1}
+
+    blogService.update(changedBlog.id, changedBlog)
+    .then(response => {
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
+    })
+    .catch(error => {
+      setError('adding like failed')
+    })
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+
+
+  }
+
+  
   const handleTitleChange = (event) => {
     setNewTitle(event.target.value)
   }
@@ -138,6 +158,15 @@ const App = () => {
       )
     }
 
+  const SortedBlogs = () => {
+    const sorts = blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+      <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)} />
+    )
+  
+    return (
+      sorts
+    )
+  }
      
   return (
     <div>
@@ -152,9 +181,7 @@ const App = () => {
       newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
       handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      <SortedBlogs/>
     </div>
   )
 }
