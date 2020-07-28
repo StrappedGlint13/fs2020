@@ -7,7 +7,8 @@ const BlogForm = ({
     handleUrlChange,
     newTitle,
     newAuthor,
-    newUrl
+    newUrl,
+    removeBlog
 }) =>
 <form onSubmit={addBlog}>
 <div>

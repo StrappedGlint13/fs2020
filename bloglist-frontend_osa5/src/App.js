@@ -94,7 +94,7 @@ const App = () => {
 
   const addLike = (id) => {
     const blog = blogs.find(n => n.id === id)
-    const changedBlog = {...blog, likes: blog.likes + 1}
+    const changedBlog = { ...blog, likes: blog.likes + 1}
 
     blogService.update(changedBlog.id, changedBlog)
     .then(response => {
@@ -160,13 +160,37 @@ const App = () => {
 
   const SortedBlogs = () => {
     const sorts = blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-      <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)} />
+      <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)}
+      removeBlog={() => removeBlog(blog)} />
     )
   
     return (
       sorts
     )
   }
+
+  const removeBlog = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title}?`))
+    try {
+      blogService.setToken(user.token)
+      setUser(user)
+      await blogService.remove(blog.id)
+      setMessage(`${blog.title} deleted`)
+      setBlogs(blogs.filter(a => a.id !== blog.id))
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      setError("Delete failed")
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+      
+    }
+   
+  }
+  
+    
      
   return (
     <div>
