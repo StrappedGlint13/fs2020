@@ -12,13 +12,14 @@ const Blog = ({ blog, addLike, removeBlog }) => {
 
 
   return (
+    <li className='blog'>
     <div style={blogStyle}>
       <div>
-        {blog.title} {blog.author}
+        <p id='blogTa'>{blog.title}{blog.author}</p>
         <Togglable buttonLabel="view" >
-          {blog.url}
+          <p id='url'>{blog.url}</p>
           <br></br>
-      likes {blog.likes}
+      <p id='likes'> likes {blog.likes} </p>
           <button onClick={addLike}>like</button>
           <br></br>
           {blog.user.username}
@@ -27,6 +28,7 @@ const Blog = ({ blog, addLike, removeBlog }) => {
         </Togglable>
       </div>
     </div>
+    </li>
   )}
 
 export default Blog
