@@ -49,9 +49,9 @@ beforeEach(() => {
       const button = component.getByText('view')
       fireEvent.click(button)
       
-      const ta = component.container.querySelector('blogTa')
-      const url = component.container.querySelector('url')
-      const likes = component.container.querySelector('likes')
+      const ta = component.container.querySelector('#blogTa')
+      const url = component.container.querySelector('#url')
+      const likes = component.container.querySelector('#likes')
 
       expect (ta).toBeDefined()
       expect(url).toBeDefined()
