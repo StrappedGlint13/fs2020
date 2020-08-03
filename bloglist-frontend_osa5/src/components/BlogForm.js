@@ -12,20 +12,20 @@ const BlogForm = ({
 }) =>
   <form onSubmit={addBlog}>
     <div>
-  title: <input value={newTitle}
+  title: <input id={'title'} value={newTitle}
         onChange={handleTitleChange} />
     </div>
     <div>
-  author: <input value={newAuthor}
+  author: <input id={'author'} value={newAuthor}
         onChange={handleAuthorChange} />
     </div>
     <div>
       <div>
-  url: <input value={newUrl}
+  url: <input id={'url'} value={newUrl}
           onChange={handleUrlChange} />
       </div>
       <div></div>
-      <button type="submit">create</button>
+      <button id={'create-button'} type="submit">create</button>
     </div>
   </form>
 

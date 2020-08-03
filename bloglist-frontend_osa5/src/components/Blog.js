@@ -15,14 +15,14 @@ const Blog = ({ blog, addLike, removeBlog }) => {
     <li className='blog'>
     <div style={blogStyle}>
       <div>
-        <p id='blogTa'>{blog.title}{blog.author}</p>
+        <p id='title'>title: {blog.title}</p> 
+        <p id='author'>author: {blog.author}</p>
         <Togglable buttonLabel="view" >
-          <p id='url'>{blog.url}</p>
+          <p id='url'> url: {blog.url}</p>
           <br></br>
-      <p id='likes'> likes {blog.likes} </p>
-          <button onClick={addLike}>like</button>
+      <p id='likes'> likes: {blog.likes} <button onClick={addLike}> like</button> </p>      
           <br></br>
-          {blog.user.username}
+          user: {blog.user.username}
           <br></br>
           <button onClick={removeBlog}>remove</button>
         </Togglable>
