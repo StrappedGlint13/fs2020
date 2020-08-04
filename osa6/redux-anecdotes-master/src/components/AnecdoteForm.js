@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { newVote } from '../reducers/anecdoteReducer'
+import  { setNotification }  from '../reducers/notiReducer'
 
 
 const AnecdoteForm = () => {
@@ -11,6 +12,10 @@ const AnecdoteForm = () => {
     const content = event.target.vote.value
     event.target.vote.value = ''
     dispatch(newVote(content))
+    dispatch(setNotification(`You have created a new anecdote`))
+    setTimeout(() => {
+        dispatch(setNotification(''))
+    }, 5000)
   }
 
   return (
