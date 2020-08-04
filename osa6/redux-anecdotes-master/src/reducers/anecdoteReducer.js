@@ -37,6 +37,7 @@ export const newVote = (content) => {
   }
 }
 
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
