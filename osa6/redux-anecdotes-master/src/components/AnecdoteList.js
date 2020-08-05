@@ -5,7 +5,20 @@ import  { setNotification }  from '../reducers/notiReducer'
 
 const AnecdoteList = () => {
 
-const anecdotes = useSelector(state => state.anecdotes)
+const anecdotes = useSelector(state => {
+    if (state.filter === '') {
+        return state.anecdotes
+    }
+    
+    const sorts = state.anecdotes.sort((a,b) => b.votes - a.votes)
+
+    return sorts.filter(a => a.content
+        .toUpperCase()
+        .includes(state.filter.toUpperCase()))
+})
+
+
+
 const dispatch = useDispatch()
 
 const vote = (id) => {
@@ -19,11 +32,11 @@ const vote = (id) => {
     }, 5000)
 }
 
-const sorts = anecdotes.sort((a,b) => b.votes - a.votes)
+
 
   return (
     <div>
-    {sorts.map(anecdote =>
+    {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
