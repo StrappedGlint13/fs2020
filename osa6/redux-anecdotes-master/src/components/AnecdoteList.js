@@ -26,11 +26,7 @@ const vote = (id) => {
         ...anecdote, votes: anecdote.votes + 1
       }
     dispatch(addVote(id, changedVote))
-    dispatch(setNotification
-        (`You voted "${anecdote.content}"`))
-    setTimeout(() => {
-        dispatch(setNotification(''))
-    }, 5000)
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
 }
 
 const sorts = anecdotes.sort((a,b) => b.votes - a.votes)

@@ -1,7 +1,17 @@
-export const setNotification = notification => {
-    return {
-      type: 'SET_NOTI',
-      notification,
+
+export const setNotification = ( notification, time) => {
+    return async dispatch => {
+      dispatch({
+        type: 'SET_NOTI',
+        notification,
+      })
+      setTimeout(() => {
+        dispatch({
+            type: 'SET_NOTI',
+            notification: null,
+          })
+      }, time * 500 )
+      
     }
   }
   const notiReducer = (state = 'ALL', action) => {

@@ -10,7 +10,7 @@ const Notification = () => {
     borderWidth: 1
   }
 
-  if (notification === '' || notification === 'ALL') {
+  if (notification === '' || notification === null || notification === 'ALL') {
     return <div></div>
   }
   return (
