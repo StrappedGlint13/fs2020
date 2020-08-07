@@ -42,8 +42,18 @@
     },
     {
       "content": "asd",
-      "votes": 2,
+      "votes": 3,
       "id": "S5ApfzG"
+    },
+    {
+      "content": "new anecdote",
+      "votes": 0,
+      "id": "GGOs2Zn"
+    },
+    {
+      "content": "asdasdasdasdsad",
+      "votes": 1,
+      "id": "MPeuI_n"
     }
   ]
 }
