@@ -2,8 +2,9 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import  { setNotification }  from '../reducers/notiReducer'
+import { connect } from 'react-redux' 
 
-const AnecdoteList = () => {
+const AnecdoteList = ( props ) => {
 
 const anecdotes = useSelector(state => {
     if (state.filter === '') {
@@ -26,7 +27,7 @@ const vote = (id) => {
         ...anecdote, votes: anecdote.votes + 1
       }
     dispatch(addVote(id, changedVote))
-    dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
+    props.setNotification(`you voted '${anecdote.content}'`, 10)
 }
 
 const sorts = anecdotes.sort((a,b) => b.votes - a.votes)
@@ -48,4 +49,5 @@ const sorts = anecdotes.sort((a,b) => b.votes - a.votes)
   )     
 }
 
-export default AnecdoteList
+export default connect(null, 
+    {setNotification})(AnecdoteList)
