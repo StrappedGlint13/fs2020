@@ -3,7 +3,6 @@ import { newAnecdote } from '../reducers/anecdoteReducer'
 import  { setNotification }  from '../reducers/notiReducer'
 import { connect } from 'react-redux' 
 
-
 const AnecdoteForm = ( props ) => {
 
     const newV = async (event) => {
@@ -14,7 +13,7 @@ const AnecdoteForm = ( props ) => {
         props.setNotification(`You have created a new anecdote`)
         setTimeout(() => {
             props.setNotification('')
-        }, 5000)
+        }, 5000, 0)
   }
 
   return (

@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notiReducer'
 
 
