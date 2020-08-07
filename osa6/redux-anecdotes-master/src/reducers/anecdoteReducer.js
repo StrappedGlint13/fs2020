@@ -20,12 +20,14 @@ const asObject = (anecdote) => {
   }
 }
 
-export const addVote = (id) => {
-  return {
-    type: 'ADD_VOTE',
-    data: {
-      id: id
-    }
+export const addVote = (id, anecdote) => {
+  return async dispatch => {
+    const updatedAnecdote = await anecdoteService.update(id, anecdote)
+    dispatch({
+      type: 'ADD_VOTE',
+      data: updatedAnecdote
+    })
+    
   }
 }
 

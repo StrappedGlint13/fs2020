@@ -22,7 +22,10 @@ const dispatch = useDispatch()
 const vote = (id) => {
     console.log('vote', id)
     const anecdote = anecdotes.find(a => a.id === id)
-    dispatch(addVote(id))
+      const changedVote = {
+        ...anecdote, votes: anecdote.votes + 1
+      }
+    dispatch(addVote(id, changedVote))
     dispatch(setNotification
         (`You voted "${anecdote.content}"`))
     setTimeout(() => {
