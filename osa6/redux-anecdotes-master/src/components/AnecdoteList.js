@@ -10,9 +10,7 @@ const anecdotes = useSelector(state => {
         return state.anecdotes
     }
     
-    const sorts = state.anecdotes.sort((a,b) => b.votes - a.votes)
-
-    return sorts.filter(a => a.content
+    return state.anecdotes.filter(a => a.content
         .toUpperCase()
         .includes(state.filter.toUpperCase()))
 })
@@ -32,11 +30,11 @@ const vote = (id) => {
     }, 5000)
 }
 
-
+const sorts = anecdotes.sort((a,b) => b.votes - a.votes)
 
   return (
     <div>
-    {anecdotes.map(anecdote =>
+    {sorts.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
