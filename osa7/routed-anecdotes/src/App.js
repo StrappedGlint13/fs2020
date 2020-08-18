@@ -1,19 +1,54 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route, Link, useParams
 } from "react-router-dom"
 
-const Menu = ( {toPage }) => {
+
+const Anecdote = ({anecdotes}) => {
+  const id = useParams().id 
+  console.log(anecdotes) 
+  const anec = anecdotes.find(n => n.id === id)
+  console.log(anec)
+  return (
+    <div>
+      <h2>{anec.content}</h2>
+      <br></br>
+      <div>has {anec.votes} votes</div>
+      <br></br>
+      <div>for more info see <a href={anec.info}> {anec.info}</a></div>
+    </div>
+  )
+}
+
+const Menu = ({
+  addNew, anecdotes} ) => {
   const padding = {
     paddingRight: 5
   }
   return (
-    <div>
-      <a href="" onClick={toPage('home')} style={padding}>anecdotes</a>
-      <a href="" onClick={toPage('about')} style={padding}>create new</a>
-      <a href="" onClick={toPage('create')} style={padding}>about</a>
-    </div>
+    <Router>
+      <div>
+        <Link style={padding} to="/">anecdotes</Link>
+        <Link style={padding} to="/about">about</Link>
+        <Link style={padding} to="/create">create a new</Link>
+      </div>
+
+      <Switch>
+        <Route path="/anecdotes/:id">
+        <Anecdote anecdotes={anecdotes} />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/create">
+          <CreateNew addNew={addNew} />
+        </Route>
+        <Route path="/">
+        <AnecdoteList anecdotes={anecdotes} />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
@@ -21,7 +56,9 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id}>
+        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>  
+      </li>)}
     </ul>
   </div>
 )
@@ -89,23 +126,6 @@ const CreateNew = (props) => {
 
 const App = () => {
 
-  const [page, setPage] = useState('home')
-
-  const toPage = (page) => (event) => {
-    event.preventDefault()
-    setPage(page)
-  }
-
-  const content = () => {
-    if (page === 'home') {
-       return <AnecdoteList anecdotes={anecdotes} />
-    } else if (page === 'about') {
-      return  <About />
-    } else if (page === 'create') {
-      return <CreateNew addNew={addNew} />
-    }
-  }
-
 
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -123,6 +143,9 @@ const App = () => {
       id: '2'
     }
   ])
+
+  
+  
 
   const [notification, setNotification] = useState('')
 
@@ -148,10 +171,9 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu toPage={toPage}/>
-      
-     {content()}
-      
+      <Menu 
+      addNew={addNew} anecdotes={anecdotes} />
+      <br></br>
       <Footer />
     </div>
   )
