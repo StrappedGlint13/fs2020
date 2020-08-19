@@ -15,7 +15,7 @@ const useField = (type) => {
       input: {type,
       value,
       onChange},
-      reset: reset, 
+      reset 
     }
   }
 
