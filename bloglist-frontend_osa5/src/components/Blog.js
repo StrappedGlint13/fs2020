@@ -22,8 +22,6 @@ const Blog = ({ blog, addLike, removeBlog }) => {
           <br></br>
       <p id='likes'> likes: {blog.likes} <button onClick={addLike}> like</button> </p>      
           <br></br>
-          user: {blog.user.username}
-          <br></br>
           <button onClick={removeBlog}>remove</button>
         </Togglable>
       </div>
