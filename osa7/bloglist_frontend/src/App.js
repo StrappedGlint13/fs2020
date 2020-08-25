@@ -9,7 +9,8 @@ import './App.css'
 import Togglable from './components/Togglable'
 import  { setNotification, setError }  from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, newBlog } from './reducers/reducer'
+import { initializeBlogs, newBlog, 
+addLike, removeBlog } from './reducers/reducer'
 
 
 const App = () => {
@@ -61,7 +62,6 @@ const App = () => {
     setNewUrl('')
     noti = dispatch(setNotification(`a new blog '${blogObject.title}' added`, 10))
 
-
   }
 
   const handleLogin = async (event) => {
@@ -85,18 +85,13 @@ const App = () => {
     }
   }
 
-  const addLike = (id) => {
+  const like = (id) => {
       const blog = blogs.find(n => n.id === id)
+      console.log(blog)
       const changedBlog = { ...blog, likes: blog.likes + 1 }
 
-      blogService.update(changedBlog.id, changedBlog)
-        .then(response => {
-          dispatch(blogs.map(blog => blog.id !== id ? blog : response))
-        })
-        .catch(error => {
-          err = dispatch(setError('adding like failed'), 10)
-        })
-
+      dispatch(addLike(id, changedBlog))
+      noti = dispatch(setNotification(`a like added for '${blog.title}'`, 10))
   }
   
 
@@ -150,29 +145,18 @@ const App = () => {
   }
 
   const SortedBlogs = () => {
-    const sorts = blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-      <Blog key={blog.id} blog={blog} user={user} addLike={() => addLike(blog.id)}
-        removeBlog={() => removeBlog(blog)} />
+    return blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+      <Blog key={blog.id} blog={blog} user={user} addLike={() => like(blog.id)}
+        removeBlog={() => remove(blog)} />
     )
 
-    return (
-      sorts
-    )
   }
 
-  const removeBlog = async (blog) => {
+  const remove = (blog) => {
     if (window.confirm(`Remove blog ${blog.title}?`))
-      try {
-        blogService.setToken(user.token)
-        setUser(user)
-        await blogService.remove(blog.id)
+        dispatch(removeBlog(blog.id))
         noti = dispatch(setNotification(`${blog.title} deleted`, 10))
-        dispatch(blogs.filter(a => a.id !== blog.id))
-      } catch (error) {
-        err = dispatch(setError('Delete failed', 10))
       }
-
-  }
 
 
   return (
