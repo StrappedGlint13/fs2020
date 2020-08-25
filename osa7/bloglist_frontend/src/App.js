@@ -8,11 +8,11 @@ import Error from './components/Error.js'
 import './App.css'
 import Togglable from './components/Togglable'
 import  { setNotification, setError }  from './reducers/notiReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs, newBlog } from './reducers/reducer'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [newTitle, setNewTitle] = useState('')
@@ -24,14 +24,16 @@ const App = () => {
 
   const dispatch = useDispatch()
 
+  const blogs = useSelector(state => {
+    return state.blogs
+  })
+
   let noti = null
   let err = null
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    dispatch(initializeBlogs())
+  },[dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -42,7 +44,7 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = (event, props) => {
+  const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
       title: newTitle,
@@ -53,18 +55,12 @@ const App = () => {
 
     blogFormRef.current.toggleVisibility()
 
-    blogService
-      .create(blogObject)
+    dispatch(newBlog(blogObject))
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+    noti = dispatch(setNotification(`a new blog '${blogObject.title}' added`, 10))
 
-
-      .then(res => {
-        setBlogs(blogs.concat(res))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
-        noti = dispatch(setNotification(`a new blog '${blogObject.title}' added`, 10))
-        console.log(noti)
-      })
 
   }
 
@@ -85,7 +81,7 @@ const App = () => {
       setPassword('')
       noti = dispatch(setNotification(`Welcome ${user.username}`, 10))
     } catch (exception) {
-      err = dispatch(setError('invalid username or password'), 10)
+      err = dispatch(setError('invalid username or password', 10))
     }
   }
 
@@ -95,7 +91,7 @@ const App = () => {
 
       blogService.update(changedBlog.id, changedBlog)
         .then(response => {
-          setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
+          dispatch(blogs.map(blog => blog.id !== id ? blog : response))
         })
         .catch(error => {
           err = dispatch(setError('adding like failed'), 10)
@@ -171,7 +167,7 @@ const App = () => {
         setUser(user)
         await blogService.remove(blog.id)
         noti = dispatch(setNotification(`${blog.title} deleted`, 10))
-        setBlogs(blogs.filter(a => a.id !== blog.id))
+        dispatch(blogs.filter(a => a.id !== blog.id))
       } catch (error) {
         err = dispatch(setError('Delete failed', 10))
       }
