@@ -7,6 +7,8 @@ import Notification from './components/Notification'
 import Error from './components/Error.js'
 import './App.css'
 import Togglable from './components/Togglable'
+import  { setNotification, setError }  from './reducers/notiReducer'
+import { useDispatch } from 'react-redux'
 
 
 const App = () => {
@@ -18,9 +20,12 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('')
   const blogFormRef= useRef()
 
-  const [message, setMessage] = useState(null)
-  const [error, setError] = useState(null)
   const [user, setUser] = useState(null)
+
+  const dispatch = useDispatch()
+
+  let noti = null
+  let err = null
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -37,7 +42,7 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = (event) => {
+  const addBlog = (event, props) => {
     event.preventDefault()
     const blogObject = {
       title: newTitle,
@@ -57,10 +62,8 @@ const App = () => {
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
-        setMessage(`a new blog '${blogObject.title}' added`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+        noti = dispatch(setNotification(`a new blog '${blogObject.title}' added`, 10))
+        console.log(noti)
       })
 
   }
@@ -80,15 +83,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setMessage(`Welcome ${user.username}`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      noti = dispatch(setNotification(`Welcome ${user.username}`, 10))
     } catch (exception) {
-      setError('invalid username or password')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      err = dispatch(setError('invalid username or password'), 10)
     }
   }
 
@@ -101,11 +98,8 @@ const App = () => {
           setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
         })
         .catch(error => {
-          setError('adding like failed')
+          err = dispatch(setError('adding like failed'), 10)
         })
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
 
   }
   
@@ -131,7 +125,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Error error={error} />
+        <Error />
         <h2>Log in to application</h2>
         <form onSubmit={handleLogin}>
           <div>
@@ -176,17 +170,10 @@ const App = () => {
         blogService.setToken(user.token)
         setUser(user)
         await blogService.remove(blog.id)
-        setMessage(`${blog.title} deleted`)
+        noti = dispatch(setNotification(`${blog.title} deleted`, 10))
         setBlogs(blogs.filter(a => a.id !== blog.id))
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
       } catch (error) {
-        setError('Delete failed')
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-
+        err = dispatch(setError('Delete failed', 10))
       }
 
   }
@@ -195,7 +182,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={message} />
+      <Notification />
       {user.name} logged in
       <button onClick={() => handleLogout()}>logout</button>
       <br></br>

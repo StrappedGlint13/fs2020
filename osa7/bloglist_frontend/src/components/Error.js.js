@@ -1,7 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { setError } from '../reducers/notiReducer'
 
-const Error = ({ error }) => {
-  if (error === null) {
+const Error = ( props ) => {
+  const error = props.error
+
+  if (error === '' || error === null || error === 'ALL') {
     return null
   }
 
@@ -12,5 +16,18 @@ const Error = ({ error }) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    error: state.error
+  }
+}
 
-export default Error
+
+const mapDispatchToProps = {
+  setError,
+}
+
+const connectedErrors = connect(mapStateToProps,
+  mapDispatchToProps)(Error)
+
+export default connectedErrors

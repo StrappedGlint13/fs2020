@@ -1,16 +1,34 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { setNotification } from '../reducers/notiReducer'
 
-const Notification = ({ message }) => {
-  if (message === null) {
+const Notification = ( props ) => {
+  const notification = props.notification
+  
+  
+  if (notification === '' || notification === null || notification === 'ALL') {
     return null
   }
-  console.log(message)
+
   return (
-    <div className="message">
-      {message}
+    <div className="notification">
+      {notification}
     </div>
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    notification: state.notification
+  }
+}
 
-export default Notification
+
+const mapDispatchToProps = {
+  setNotification,
+}
+
+const connectedNotifications = connect(mapStateToProps,
+  mapDispatchToProps)(Notification)
+
+export default connectedNotifications
