@@ -5,12 +5,18 @@ import loginService from './services/loginService'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error.js'
+import UserList from './components/UserList'
 import './App.css'
 import Togglable from './components/Togglable'
 import  { setNotification, setError }  from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, newBlog, 
 addLike, removeBlog } from './reducers/reducer'
+import {
+  BrowserRouter as Router,
+  Switch, Route, Link
+} from "react-router-dom"
+import userService from './services/userService'
 
 
 const App = () => {
@@ -22,6 +28,13 @@ const App = () => {
   const blogFormRef= useRef()
 
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
+
+  const padding = {
+    padding: 5
+  }
+
+
 
   const dispatch = useDispatch()
 
@@ -32,9 +45,17 @@ const App = () => {
   let noti = null
   let err = null
 
+
+  useEffect(() => {
+    userService.getAll().then(users =>
+      setUsers( users )
+    )
+  }, [])
+
   useEffect(() => {
     dispatch(initializeBlogs())
   },[dispatch])
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -44,6 +65,9 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+ 
+
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -146,7 +170,7 @@ const App = () => {
 
   const SortedBlogs = () => {
     return blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-      <Blog key={blog.id} blog={blog} user={user} addLike={() => like(blog.id)}
+      <Blog key={blog.id} blog={blog} user={blog.user} addLike={() => like(blog.id)}
         removeBlog={() => remove(blog)} />
     )
 
@@ -160,11 +184,17 @@ const App = () => {
 
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      {user.name} logged in
+    <Router>
+      <div>
+        <Link style={padding} to="/blogs">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user.name} logged in
       <button onClick={() => handleLogout()}>logout</button>
+      </div>
+      <Notification />
+      <Switch>
+      <Route path="/blogs">
+      <h2>blogs</h2>
       <br></br>
       <h2>create new</h2>
       <Togglable buttonLabel='new note' ref={blogFormRef}>
@@ -173,8 +203,12 @@ const App = () => {
           handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
       </Togglable>
       <SortedBlogs/>
-    </div>
-
+      </Route>
+      <Route path="/users">
+        <UserList users={users} />
+      </Route>
+    </Switch>
+    </Router>
   )
 }
 
