@@ -1,4 +1,7 @@
 import React from 'react'
+import {
+    Link
+} from "react-router-dom"
 
 const UserList = ( {users} ) => {
   const usersStyle = {
@@ -18,7 +21,9 @@ const UserList = ( {users} ) => {
             <th>blogs created</th>
           </tr>
           {users.map(user => <tr key={user.id}>
-            <td>{user.name}</td>
+            <Link to={`/blogs/${user.id}`}>
+
+            {user.name}</Link>
             <td>{user.blogs.reduce((sum) => 
           sum + 1, 0)}</td> 
       </tr>)}

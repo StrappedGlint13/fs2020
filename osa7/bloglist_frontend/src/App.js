@@ -6,6 +6,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error.js'
 import UserList from './components/UserList'
+import Blogs from './components/Blogs'
 import './App.css'
 import Togglable from './components/Togglable'
 import  { setNotification, setError }  from './reducers/notiReducer'
@@ -193,6 +194,9 @@ const App = () => {
       </div>
       <Notification />
       <Switch>
+      <Route path="/blogs/:id">
+        <Blogs users={users} />
+      </Route>
       <Route path="/blogs">
       <h2>blogs</h2>
       <br></br>
