@@ -7,16 +7,16 @@ const Blogs = ({ users }) => {
 
     const id = useParams().id
     const user = users.find(n => n.id === id)
-    console.log(id)
-    console.log('user', user)
-    console.log('users', users)
+
+    if (!user) {    
+        return null  
+    }
 
   return (
     <div>
       <h2> {user.name} </h2>
           {user.blogs.map(blog => <li key={blog.id}>
-              {blog.title}
-              
+              {blog.title}         
           </li>)
           }
           

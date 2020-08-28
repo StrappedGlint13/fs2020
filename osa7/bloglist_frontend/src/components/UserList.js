@@ -21,8 +21,7 @@ const UserList = ( {users} ) => {
             <th>blogs created</th>
           </tr>
           {users.map(user => <tr key={user.id}>
-            <Link to={`/blogs/${user.id}`}>
-
+            <Link to={`/users/${user.id}`}>
             {user.name}</Link>
             <td>{user.blogs.reduce((sum) => 
           sum + 1, 0)}</td> 

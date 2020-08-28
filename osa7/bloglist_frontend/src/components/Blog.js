@@ -1,7 +1,9 @@
 import React from 'react'
-import Togglable from './Togglable'
+import {
+  Link
+} from "react-router-dom"
 
-const Blog = ({ blog, user, addLike, removeBlog }) => {
+const Blog = ({ blogs }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,22 +14,12 @@ const Blog = ({ blog, user, addLike, removeBlog }) => {
 
 
   return (
-    <li className='blog'>
     <div style={blogStyle}>
-      <div>
-        <p id='title'>title: {blog.title}</p> 
-        <p id='author'>author: {blog.author}</p>
-        <Togglable buttonLabel="view" >
-          <p id='url'> url: {blog.url}</p>
-          <br></br>
-      <p id='likes'> likes: {blog.likes} <button onClick={addLike}> like</button> </p>      
-          <br></br>
-          <p id='user'> user: {user.username} </p>
-          <button onClick={removeBlog}>remove</button>
-        </Togglable>
-      </div>
+        {blogs.map(blog => <p key={blog.id}>
+        <Link to={`/blogs/${blog.id}`}>
+            {blog.url}</Link>
+        </p>)}
     </div>
-    </li>
   )}
 
 export default Blog

@@ -58,10 +58,10 @@ const reducer = (state = [], action) => {
 
   export const removeBlog = (id) => {
       return async dispatch => {
-           await blogService.remove(id)
+          const removedBlog = await blogService.remove(id)
           dispatch({
               type:'REMOVE_BLOG',
-              data: id
+              data: removedBlog
           })
       }
   }

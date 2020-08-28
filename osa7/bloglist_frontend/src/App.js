@@ -15,9 +15,10 @@ import { initializeBlogs, newBlog,
 addLike, removeBlog } from './reducers/reducer'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route, Link, useParams, useHistory, Redirect
 } from "react-router-dom"
 import userService from './services/userService'
+import SingleBlog from './components/SingleBlog'
 
 
 const App = () => {
@@ -169,44 +170,47 @@ const App = () => {
     )
   }
 
-  const SortedBlogs = () => {
-    return blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-      <Blog key={blog.id} blog={blog} user={blog.user} addLike={() => like(blog.id)}
-        removeBlog={() => remove(blog)} />
+  const CertainBlog = () => {
+    const id = useParams().id
+    const blog = blogs.find(n => n.id === id)
+    console.log(blog)
+
+    if(!blog || blog === undefined) {
+      return null
+    }
+
+    return (
+      <SingleBlog blog={blog} user={blog.user} addLike={() => like(blog.id)}/>
     )
 
   }
-
-  const remove = (blog) => {
-    if (window.confirm(`Remove blog ${blog.title}?`))
-        dispatch(removeBlog(blog.id))
-        noti = dispatch(setNotification(`${blog.title} deleted`, 10))
-      }
-
 
   return (
     <Router>
       <div>
         <Link style={padding} to="/blogs">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user.name} logged in
-      <button onClick={() => handleLogout()}>logout</button>
+        <Link style={padding} to="/users">users</Link>  
       </div>
+      <h2>blogs</h2>  
       <Notification />
+      {user.name} logged in
+      <button onClick={() => handleLogout()}>logout</button>
       <Switch>
-      <Route path="/blogs/:id">
+      <Route path="/users/:id">
         <Blogs users={users} />
       </Route>
+      <Route path="/blogs/:id">
+        <CertainBlog />
+      </Route>
       <Route path="/blogs">
-      <h2>blogs</h2>
       <br></br>
       <h2>create new</h2>
-      <Togglable buttonLabel='new note' ref={blogFormRef}>
+      <Togglable buttonLabel='new blog' ref={blogFormRef}>
         <BlogForm addBlog={addBlog} newTitle={newTitle}
           newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
           handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
       </Togglable>
-      <SortedBlogs/>
+      <Blog blogs={blogs}/>
       </Route>
       <Route path="/users">
         <UserList users={users} />
