@@ -1,4 +1,5 @@
 import React from 'react'
+import { Table } from 'react-bootstrap'
 
 const SingleBlog = ({ blog, user, addLike }) => {
 
@@ -10,14 +11,21 @@ const SingleBlog = ({ blog, user, addLike }) => {
         return null  
     }
 
-  return (    
+  return ( 
       <div>
-        <h2>{blog.title} {blog.author}</h2>        
-           <a href={blog.url}>url: {blog.url}</a>
-      <p>likes: {blog.likes} <button onClick={addLike}> like</button> </p>      
-          <p> added by: {user.username} </p>
+        <h2>{blog.title} {blog.author}</h2>  
+          <Table striped> 
+            <tbody>
+           <tr><td><a href={blog.url}>url: {blog.url}</a></td></tr>
+            <tr> 
+                <td>likes: {blog.likes} <button onClick={addLike}> like</button> </td>
+                </tr>      
+          <tr> 
+              <td>added by: {user.username}</td>
+          </tr>
+          </tbody> 
+          </Table> 
       </div>
-   
   )}
 
 export default SingleBlog

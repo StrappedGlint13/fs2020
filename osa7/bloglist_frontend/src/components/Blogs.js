@@ -2,7 +2,6 @@ import React from 'react'
 import {
      useParams
   } from "react-router-dom"
-
 const Blogs = ({ users }) => {
 
     const id = useParams().id
@@ -15,13 +14,12 @@ const Blogs = ({ users }) => {
   return (
     <div>
       <h2> {user.name} </h2>
-          {user.blogs.map(blog => <li key={blog.id}>
+          {user.blogs.map(blog => <tr key={blog.id}>
               {blog.title}         
-          </li>)
-          }
+          </tr>)
           
-      </div>
-      
+          }
+   </div>
   )
   
 }

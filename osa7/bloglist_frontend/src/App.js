@@ -12,13 +12,14 @@ import Togglable from './components/Togglable'
 import  { setNotification, setError }  from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, newBlog, 
-addLike, removeBlog } from './reducers/reducer'
+addLike } from './reducers/reducer'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, useParams, useHistory, Redirect
+  Switch, Route, Link, useParams
 } from "react-router-dom"
 import userService from './services/userService'
 import SingleBlog from './components/SingleBlog'
+import { Navbar, Nav } from 'react-bootstrap'
 
 
 const App = () => {
@@ -33,7 +34,7 @@ const App = () => {
   const [users, setUsers] = useState([])
 
   const padding = {
-    padding: 5
+    padding: 7
   }
 
 
@@ -187,14 +188,26 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <div className="container">
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+          <Nav.Link href="#" as="span">
         <Link style={padding} to="/blogs">blogs</Link>
-        <Link style={padding} to="/users">users</Link>  
-      </div>
-      <h2>blogs</h2>  
+        </Nav.Link>
+        <Nav.Link href="#" as="span">
+        <Link style={padding} to="/users">users</Link> 
+        </Nav.Link>
+        <p style={padding}> {user.name} logged in  </p>
+        <Nav.Link href="#" as="span">
+        <button onClick={() => handleLogout()}>logout</button>
+        </Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+      </Navbar>
+      <h1>Blog app</h1>  
       <Notification />
-      {user.name} logged in
-      <button onClick={() => handleLogout()}>logout</button>
       <Switch>
       <Route path="/users/:id">
         <Blogs users={users} />
@@ -216,6 +229,7 @@ const App = () => {
         <UserList users={users} />
       </Route>
     </Switch>
+    </div>
     </Router>
   )
 }
