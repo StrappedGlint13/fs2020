@@ -1,8 +1,17 @@
-interface exValues {
-    exDays: number[]
+interface ExValues {
+    exDays: number[];
 }
 
+const parseArgument = (args: Array<string>): ExValues => {
+  if (args.length < 3) throw new Error('Not enough arguments');
+  
+  var arguments = [].slice.call(args);
+  var myArgs = arguments.slice(2);
 
+  return {
+      exDays: myArgs
+  }
+}
 
   const exCalculator = (exDays: Array<number>) => {
     const trainingDays = exDays.filter(x => x > 0)
@@ -14,8 +23,9 @@ interface exValues {
         success = false
     }
 
-    const sum = trainingDays.reduce((sum, ex) => sum + ex, 0)
+    const sum = trainingDays.reduce((sum, ex) => sum + Number(ex), 0)
     const session = trainingDays.reduce((sum, ex) => sum + 1, 0)
+
     const average = sum / session
 
     if (sum  > 7) {
@@ -38,16 +48,16 @@ interface exValues {
         ratingDescripton: ratingDescripton,
         target: 2,
         average: average
-
     }
 
-    console.log(data)
-  
+    console.log(data) 
     
 }
     
  try {
-      exCalculator([1,2,3,4,5,6,7])
+  const {exDays} = parseArgument(process.argv)  
+  exCalculator(exDays)
+
   } catch (e) {
     console.log('Error, something bad happened, message: ', e.message);
   }
