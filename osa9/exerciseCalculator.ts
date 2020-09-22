@@ -5,8 +5,8 @@ interface ExValues {
 const parseArgument = (args: Array<string>): ExValues => {
   if (args.length < 3) throw new Error('Not enough arguments');
   
-  var arguments = [].slice.call(args);
-  var myArgs = arguments.slice(2);
+  var argums = [].slice.call(args);
+  var myArgs = argums.slice(2);
 
   return {
       exDays: myArgs
