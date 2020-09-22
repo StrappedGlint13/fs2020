@@ -1,6 +1,6 @@
-interface calcValues {
-    value1: number;
-    value2: number;
+/*interface calcValues {
+    height: number;
+    weight: number;
   }
   
   const parseArguments = (args: Array<string>): calcValues => {
@@ -11,42 +11,49 @@ interface calcValues {
     
     if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
       return {
-        value1: Number(args[2]),
-        value2: Number(args[3])
+        height: Number(args[2]),
+        weight: Number(args[3])
       }
     } else {
       throw new Error('Provided values were not numbers!');
     }
   }
+*/
 
+  const calculator = (height: number, weight: number) => {
+   
+    height = height * 0.01
+    const bmi = weight / (height * height)
 
-  const calculator = (height: number, mass: number, printText: string) => {
-    console.log(printText)
-    
-  }
-  
-  try {
-    const { value1, value2 } = parseArguments(process.argv);
-    const height = value1 * 0.01
-    const bmi = value2 / (height * height)
-
-    if (bmi < 15) {
-        calculator(value1, value2, `Very severely underweight`);
-    } else if (bmi > 15 && bmi < 16) {
-        calculator(value1, value2, `Severely underweight`);
-    } else if (bmi > 16 && bmi < 18.5 ) {
-        calculator(value1, value2, `Underweight`);
-    } else if (bmi > 18.5 && bmi < 25 ) {
-        calculator(value1, value2, `Normal (healthy weight) `);
-    } else if (bmi > 25 && bmi < 30 ) {
-        calculator(value1, value2, `Overweight `);
-    } else if (bmi > 30 && bmi < 35 ) {
-        calculator(value1, value2, `Obese Class I (Moderately obese)  `);
-    } else if (bmi > 35 && bmi < 40 ) {
-        calculator(value1, value2, `Obese Class II (Severely obese)  `);
-    } else if (bmi > 40) {
-        calculator(value1, value2, `Obese Class III (Very severely obese)  `);
+    if (!isNaN(bmi)) {
+      if (bmi < 15) {
+        return `Very severely underweight`
+      } else if (bmi > 15 && bmi < 16) {
+        return`Severely underweight`
+      } else if (bmi > 16 && bmi < 18.5 ) {
+        return `Underweight`
+      } else if (bmi > 18.5 && bmi < 25 ) {
+        return `Normal (healthy weight) `
+      } else if (bmi > 25 && bmi < 30 ) {
+        return `Overweight `
+      } else if (bmi > 30 && bmi < 35 ) {
+        return `Obese Class I (Moderately obese) `
+      } else if (bmi > 35 && bmi < 40 ) {
+        return `Obese Class II (Severely obese) `
+      } else {
+        return `Obese Class III (Very severely obese) `
+      }
+     } else {
+      return `malformatted parameters`
     }
+  
+}
+
+  export const calculateBmi = ( height: number, weight: number ) => {
+    try {
+    return calculator( height, weight )
+    
   } catch (e) {
-    console.log('Error, something bad happened, message: ', e.message);
+    return 'Error, something bad happened, message: ' + e.message
   }
+}
