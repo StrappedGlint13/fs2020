@@ -1,8 +1,7 @@
-/*interface calcValues {
-    height: number;
-    weight: number;
-  }
-  
+export interface ErrorMessages {
+    readonly prototype: string
+} 
+/*
   const parseArguments = (args: Array<string>): calcValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
     if (args.length > 4) throw new Error('Too many arguments');
@@ -22,38 +21,39 @@
 
   const calculator = (height: number, weight: number) => {
    
-    height = height * 0.01
-    const bmi = weight / (height * height)
+    height = height * 0.01;
+    const bmi = weight / (height * height);
 
     if (!isNaN(bmi)) {
       if (bmi < 15) {
-        return `Very severely underweight`
+        return `Very severely underweight`;
       } else if (bmi > 15 && bmi < 16) {
-        return`Severely underweight`
+        return`Severely underweight`;
       } else if (bmi > 16 && bmi < 18.5 ) {
-        return `Underweight`
+        return `Underweight`;
       } else if (bmi > 18.5 && bmi < 25 ) {
-        return `Normal (healthy weight) `
+        return `Normal (healthy weight) `;
       } else if (bmi > 25 && bmi < 30 ) {
-        return `Overweight `
+        return `Overweight `;
       } else if (bmi > 30 && bmi < 35 ) {
-        return `Obese Class I (Moderately obese) `
+        return `Obese Class I (Moderately obese) `;
       } else if (bmi > 35 && bmi < 40 ) {
-        return `Obese Class II (Severely obese) `
+        return `Obese Class II (Severely obese) `;
       } else {
-        return `Obese Class III (Very severely obese) `
+        return `Obese Class III (Very severely obese) `;
       }
      } else {
-      return `malformatted parameters`
+      return `malformatted parameters`;
     }
   
-}
+};
 
   export const calculateBmi = ( height: number, weight: number ) => {
     try {
-    return calculator( height, weight )
-    
+    return calculator( height, weight );
   } catch (e) {
-    return 'Error, something bad happened, message: ' + e.message
+     return console.log(e);
+  } finally {
+    console.log("error handling!");
   }
-}
+};
