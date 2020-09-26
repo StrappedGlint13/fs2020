@@ -1,5 +1,6 @@
 export interface ErrorMessages {
     readonly prototype: string
+    bmi: number
 } 
 /*
   const parseArguments = (args: Array<string>): calcValues => {
@@ -54,6 +55,6 @@ export interface ErrorMessages {
   } catch (e) {
      return console.log(e);
   } finally {
-    console.log("error handling!");
+    console.log("--");
   }
 };
