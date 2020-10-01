@@ -1,5 +1,6 @@
 import express from 'express';
 import diagnoseRouter from './src/routes/diagnoses';
+import patientRouter from './src/routes/patients';
 const app = express();
 app.use(express.json());
 const cors = require('cors')
@@ -14,6 +15,7 @@ app.get('/api/ping', (_req, res) => {
 });
 
 app.use('/api/diagnoses', diagnoseRouter)
+app.use('/api/patients', patientRouter)
 
 
 app.listen(PORT, () => {
