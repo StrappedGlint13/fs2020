@@ -1,6 +1,6 @@
 import patientsData from '../../data/patients.json'
 
-import { Patients, NonSensitivePatientEntry } from '../types';
+import { NewPatientEntry, Patients, NonSensitivePatientEntry } from '../types';
 
 const patients: Array<Patients> = patientsData;
 
@@ -20,7 +20,20 @@ const getNonSensitivePatientEntries = (): NonSensitivePatientEntry[] => {
 };
 
 
+const addPatient = ( entry: NewPatientEntry): Patients => {
+    const newPatientEntry = {
+        id: Math.max(...patients.map(d => d.id)) + 1,
+        ...entry
+    };
+
+patients.push(newPatientEntry);
+return newPatientEntry;
+};
+    
+
+
 export default {
   getEntries,
-  getNonSensitivePatientEntries
-};
+  getNonSensitivePatientEntries,
+  addPatient
+}
