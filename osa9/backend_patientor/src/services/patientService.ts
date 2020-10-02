@@ -24,11 +24,16 @@ const findById = (id: number): Patients | undefined => {
   return entry;
 }
 
+const generateId = () => {
+	return Math.floor(Math.random() * 123456789987654321)
+  }
+
 const addPatient = ( entry: NewPatientEntry): Patients => {
     const newPatientEntry = {
-        id: Math.max(...patients.map(d => d.id)) + 1,
+        id: generateId(),
         ...entry
     };
+    console.log(Math.max(...patients.map(d => d.id)) + 1)
 
 patients.push(newPatientEntry);
 return newPatientEntry;
