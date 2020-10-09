@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NewPatientEntry, Gender } from './types';
 
 const toNewPatientEntry = (object: any): NewPatientEntry => {
@@ -8,7 +9,15 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
         ssn: parseSsn(object.ssn), 
         gender: parseGender(object.gender),
         occupation: parseOccupation(object.occupation),
+        entries: parseEntries(object.entries)
     }
+}
+
+const parseEntries = (entries: any): Array<number> => {
+  if (!entries) {
+    throw new Error('Incorrect or missing name: ' + entries);
+  }
+  return entries;
 }
 
 const parseName = (name: any): string => {

@@ -1,26 +1,29 @@
 import patientsData from '../../data/patients.json'
 
-import { NewPatientEntry, Patients, NonSensitivePatientEntry } from '../types';
+import { NewPatientEntry, Patient, PublicPatient } from '../types';
 
-const patients: Array<Patients> = patientsData;
+const patients: Array<Patient> = patientsData;
 
-const getEntries = (): Array<Patients> => {
+const getEntries = (): Array<Patient> => {
   return patients;
 };
 
-const getNonSensitivePatientEntries = (): NonSensitivePatientEntry[] => {
+const getNonSensitivePatientEntries = (): PublicPatient[] => {
     return patients.map(
-        ({ id, name, dateOfBirth, gender, occupation}) => ({
+        ({ id, name, dateOfBirth, gender, occupation, entries}) => ({
         id,
         name,
         dateOfBirth, 
         gender,
-        occupation
+        occupation,
+        entries
     }));
 };
 
-const findById = (id: number): Patients | undefined => {  
+const findById = (id: string): Patient | undefined => {  
+  console.log(id)
   const entry = patients.find(d => d.id === id);
+  console.log(entry)
   return entry;
 }
 
@@ -28,7 +31,7 @@ const generateId = () => {
 	return Math.floor(Math.random() * 123456789987654321)
   }
 
-const addPatient = ( entry: NewPatientEntry): Patients => {
+const addPatient = ( entry: NewPatientEntry): Patient => {
     const newPatientEntry = {
         id: generateId(),
         ...entry
