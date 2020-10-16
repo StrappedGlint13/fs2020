@@ -14,9 +14,6 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
 }
 
 const parseEntries = (entries: any): Array<number> => {
-  if (!entries) {
-    throw new Error('Incorrect or missing name: ' + entries);
-  }
   return entries;
 }
 
@@ -29,7 +26,7 @@ const parseName = (name: any): string => {
 
 const parseSsn = (ssn: any): string => {
     if (!ssn || !isString(ssn)) {
-      throw new Error('Incorrect or missing name: ' + ssn);
+      throw new Error('Incorrect or missing ssn: ' + ssn);
     }
     return ssn;
 }
@@ -48,7 +45,7 @@ const isGender = (param: any): param is Gender => {
 
 const parseOccupation = (occupation: any): string => {
     if (!occupation || !isString(occupation)) {
-      throw new Error('Incorrect or missing name: ' + occupation);
+      throw new Error('Incorrect or occupation: ' + occupation);
     }
     return occupation;
 }

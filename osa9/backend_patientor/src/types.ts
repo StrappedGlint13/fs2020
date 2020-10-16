@@ -19,7 +19,7 @@ export interface Patient {
     ssn: string;
     gender: Gender | string;
     occupation: string;
-    entries: Entry[];
+    entries: Entry[] | undefined;
 }
 
 export type NewPatientEntry = Omit<Patient, 'id'>;
