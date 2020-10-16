@@ -21,9 +21,7 @@ const getNonSensitivePatientEntries = (): PublicPatient[] => {
 };
 
 const findById = (id: string): Patient | undefined => {  
-  console.log(id)
   const entry = patients.find(d => d.id === id);
-  console.log(entry)
   return entry;
 }
 
