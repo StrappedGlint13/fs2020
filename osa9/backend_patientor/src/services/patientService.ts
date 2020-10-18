@@ -1,4 +1,4 @@
-import patientsData from '../../data/patients.json'
+import patientsData from '../../data/patients'
 
 import { NewPatientEntry, Patient, PublicPatient } from '../types';
 
@@ -22,6 +22,7 @@ const getNonSensitivePatientEntries = (): PublicPatient[] => {
 
 const findById = (id: string): Patient | undefined => {  
   const entry = patients.find(d => d.id === id);
+
   return entry;
 }
 

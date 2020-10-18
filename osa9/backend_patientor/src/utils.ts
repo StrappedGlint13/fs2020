@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NewPatientEntry, Gender } from './types';
+import { NewPatientEntry, Gender, Entry, Type } from './types';
 
 const toNewPatientEntry = (object: any): NewPatientEntry => {
     return {
@@ -13,9 +13,33 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
     }
 }
 
-const parseEntries = (entries: any): Array<number> => {
-  return entries;
+const toParseEntries = (object: any): Entry => {
+  return {
+    ...object,
+    type: parseType(object.type)
+   }
 }
+
+const parseEntries = (object: any[]): Entry[] => {
+  return Object.values(object).map((obj: any) => {
+    const object = toParseEntries(obj) as Entry
+    object.id = obj.id
+    return object;
+  })
+}
+
+const parseType = (type:any) : string => {
+  if (!type || !isType(type)) {
+    throw new Error('Missing type: ' + type);
+}
+return type;
+}
+
+
+const isType = (param: any): param is Type => {
+  return Object.values(Type).includes(param);
+}
+
 
 const parseName = (name: any): string => {
     if (!name || !isString(name)) {
@@ -31,8 +55,8 @@ const parseSsn = (ssn: any): string => {
     return ssn;
 }
 
-const isGender = (param: any): param is Gender => {
-    return Object.values(Gender).includes(param);
+const isGender = (param: any): param is Gender => { 
+  return Object.values(Gender).includes(param);
   };
   
   const parseGender = (gender: any): Gender => {
