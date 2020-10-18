@@ -12,9 +12,6 @@ const SinglePatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const patient = patients[id];
 
-  const [error, setError] = React.useState<string | undefined>();
-
-  console.log(patient);
 
   React.useEffect(() => {
     const fetchSinglePatient = async (id: string) => {
@@ -25,13 +22,12 @@ const SinglePatientPage: React.FC = () => {
           dispatch(setPatient(patientFromApi));
         } catch (e) {
           console.error(e.response.data);
-          setError(e.response.data.error);
         }
     };
-    if (!patient || !patient.ssn) {
+    if (!patient ||  !patient.ssn) {
       fetchSinglePatient(id);
     }
-  }) ;
+  })
 
   const GenderIcon = () => {
       if (patient.gender === "male") {
@@ -43,13 +39,26 @@ const SinglePatientPage: React.FC = () => {
       }
   };
 
+
   return (
     <div className="App">
         <Header as='h3'>{patient.name} <GenderIcon /> </Header>
         <p>Ssn: {patient.ssn}</p>
         <p>Occupation: {patient.occupation}</p>
+        <br></br>
+        <b>entries</b>
+        <br></br>
+        <br></br>
+        <p>{patient.entries.map((entry => entry.date + ' ' +
+        entry.description))}</p>
+        {patient.entries.map((entry) => 
+        <ul key={'code'}> {entry.diagnosisCodes?.map((item) => 
+           <li key={item}>{item}</li>
+        )}</ul>)}
     </div>
   );
+  
 };
+
 
 export default SinglePatientPage;
