@@ -4,6 +4,8 @@ import { NewPatientEntry, Patient, PublicPatient } from '../types';
 
 const patients: Array<Patient> = patientsData;
 
+console.log(patients)
+
 const getEntries = (): Array<Patient> => {
   return patients;
 };
@@ -35,7 +37,6 @@ const addPatient = ( entry: NewPatientEntry): Patient => {
         id: generateId(),
         ...entry
     };
-    console.log(Math.max(...patients.map(d => d.id)) + 1)
 
 patients.push(newPatientEntry);
 return newPatientEntry;
