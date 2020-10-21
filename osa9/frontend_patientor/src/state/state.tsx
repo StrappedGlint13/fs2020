@@ -13,6 +13,7 @@ const initialState: State = {
   diagnosis: {}
 };
 
+
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
   () => initialState
