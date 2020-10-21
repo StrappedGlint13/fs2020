@@ -8,6 +8,10 @@ const getEntries = (): Array<DiagnoseEntry> => {
   return diagnoses;
 };
 
+export const findByCode = (code: string): DiagnoseEntry | undefined => {
+  const diagnose = diagnoses.find(d => d.code === code)
+  return diagnose
+}
 
 export default {
   getEntries,

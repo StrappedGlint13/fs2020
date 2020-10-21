@@ -28,6 +28,8 @@ const findById = (id: string): Patient | undefined => {
   return entry;
 }
 
+
+
 const generateId = () => {
 	return Math.floor(Math.random() * 123456789987654321)
   }
