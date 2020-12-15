@@ -1,45 +1,45 @@
 export const setNotification = ( notification, time) => {
-    return async dispatch => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTI',
+      notification,
+    })
+    setTimeout(() => {
       dispatch({
         type: 'SET_NOTI',
-        notification,
+        notification: '',
       })
-      setTimeout(() => {
-        dispatch({
-            type: 'SET_NOTI',
-            notification: null,
-          })
-      }, time * 500 )
-      
-    }
-  }
+    }, time * 500 )
 
-  export const setError = ( error, time) => {
-    return async dispatch => {
+  }
+}
+
+export const setError = ( error, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_ERROR',
+      error,
+    })
+    setTimeout(() => {
       dispatch({
         type: 'SET_ERROR',
-        error,
+        error: '',
       })
-      setTimeout(() => {
-        dispatch({
-            type: 'SET_ERROR',
-            error: null,
-          })
-      }, time * 500 )
-      
-    }
+    }, time * 500 )
+
   }
+}
 
 
-  const notiReducer = (state = 'ALL', action) => {
-    switch (action.type) {
-      case 'SET_NOTI':
-        return action.notification
-      case 'SET_ERROR':
-        return action.error
-      default:
-        return state
-    }
+const notiReducer = (state = 'ALL', action) => {
+  switch (action.type) {
+  case 'SET_NOTI':
+    return action.notification
+  case 'SET_ERROR':
+    return action.error
+  default:
+    return state
   }
+}
 
-  export default notiReducer
+export default notiReducer

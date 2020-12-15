@@ -5,7 +5,7 @@ import { setError } from '../reducers/notiReducer'
 const Error = ( props ) => {
   const error = props.error
 
-  if (error === '' || error === null || error === 'ALL') {
+  if (error === '' || error === 'ALL') {
     return null
   }
 

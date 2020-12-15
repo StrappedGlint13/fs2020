@@ -21,9 +21,14 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const comment = (id, comment) => {
+  const request = axios.post(`${baseUrl}/${id}/comments`,comment, token)
+  return request.then(response => response.data)
+}
+
 const remove = (id) => {
   const request = axios.delete(`${baseUrl}/${id}`, token)
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove, setToken }
+export default { getAll, create, update, remove, setToken, comment }

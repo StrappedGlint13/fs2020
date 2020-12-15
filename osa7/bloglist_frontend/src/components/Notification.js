@@ -4,9 +4,9 @@ import { setNotification } from '../reducers/notiReducer'
 
 const Notification = ( props ) => {
   const notification = props.notification
-  
-  
-  if (notification === '' || notification === null || notification === 'ALL') {
+
+
+  if (notification === '' || notification === 'ALL') {
     return null
   }
 

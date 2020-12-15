@@ -1,25 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogService'
-import loginService from './services/loginService'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Error from './components/Error.js'
 import UserList from './components/UserList'
-import Blogs from './components/Blogs'
+import BlogsList from './components/BlogsList'
 import './App.css'
 import Togglable from './components/Togglable'
-import  { setNotification, setError }  from './reducers/notiReducer'
+import  { setNotification }  from './reducers/notiReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, newBlog, 
-addLike } from './reducers/reducer'
+import { initializeBlogs, newBlog,
+  addLike, setComment } from './reducers/reducer'
 import {
   BrowserRouter as Router,
   Switch, Route, Link, useParams
-} from "react-router-dom"
-import userService from './services/userService'
+} from 'react-router-dom'
 import SingleBlog from './components/SingleBlog'
 import { Navbar, Nav } from 'react-bootstrap'
+import { setLogin, setLogout } from './reducers/loginReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 
 const App = () => {
@@ -28,16 +27,12 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
+  const [comments, setComments] = useState([])
   const blogFormRef= useRef()
-
-  const [user, setUser] = useState(null)
-  const [users, setUsers] = useState([])
 
   const padding = {
     padding: 7
   }
-
-
 
   const dispatch = useDispatch()
 
@@ -45,18 +40,17 @@ const App = () => {
     return state.blogs
   })
 
-  let noti = null
-  let err = null
+  const user = useSelector(state => {
+    return state.user
+  })
 
-
-  useEffect(() => {
-    userService.getAll().then(users =>
-      setUsers( users )
-    )
-  }, [])
+  const users = useSelector(state => {
+    return state.users
+  })
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   },[dispatch])
 
 
@@ -64,12 +58,12 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      dispatch({
+        type: 'LOGIN_VIEW',
+        user
+      })
     }
-  }, [])
-
- 
+  }, [dispatch])
 
 
   const addBlog = (event) => {
@@ -78,7 +72,8 @@ const App = () => {
       title: newTitle,
       author: newAuthor,
       url: newUrl,
-      likes: 0
+      likes: 0,
+      comments: comments,
     }
 
     blogFormRef.current.toggleVisibility()
@@ -87,40 +82,38 @@ const App = () => {
     setNewTitle('')
     setNewAuthor('')
     setNewUrl('')
-    noti = dispatch(setNotification(`a new blog '${blogObject.title}' added`, 10))
+    dispatch(setNotification(`a new blog '${blogObject.title}' added`, 5))
+  }
 
+
+  const addComment = (event, id) => {
+    event.preventDefault()
+    const comment = {
+      comment: comment,
+    }
+
+
+    const blog = blogs.find(n => n.id === id)
+    const changedBlog = { ...blog, comments: blog.setComments(comment) }
+    dispatch(setComment(id, changedBlog))
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)      )
-
-
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      noti = dispatch(setNotification(`Welcome ${user.username}`, 10))
-    } catch (exception) {
-      err = dispatch(setError('invalid username or password', 10))
-    }
+    dispatch(setLogin({ username, password }))
+    dispatch(setNotification(`Welcome ${username}`, 5))
   }
-
   const like = (id) => {
-      const blog = blogs.find(n => n.id === id)
-      console.log(blog)
-      const changedBlog = { ...blog, likes: blog.likes + 1 }
+    const blog = blogs.find(n => n.id === id)
+    const changedBlog = { ...blog, likes: blog.likes + 1 }
 
-      dispatch(addLike(id, changedBlog))
-      noti = dispatch(setNotification(`a like added for '${blog.title}'`, 10))
+    dispatch(addLike(id, changedBlog))
+    dispatch(setNotification(`a like added for '${blog.title}'`, 5))
   }
-  
+
+  const handelCommentChange = (event) => {
+    setComments(event.target.value)
+  }
 
 
   const handleTitleChange = (event) => {
@@ -136,11 +129,11 @@ const App = () => {
   }
 
   const handleLogout = () => {
+    dispatch(setLogout())
     window.localStorage.removeItem('loggedUser')
-    setUser(null)
   }
 
-  if (user === null) {
+  if (user === null)  {
     return (
       <div>
         <Error />
@@ -174,14 +167,18 @@ const App = () => {
   const CertainBlog = () => {
     const id = useParams().id
     const blog = blogs.find(n => n.id === id)
-    console.log(blog)
 
     if(!blog || blog === undefined) {
       return null
     }
 
     return (
-      <SingleBlog blog={blog} user={blog.user} addLike={() => like(blog.id)}/>
+      <SingleBlog blog={blog} user={blog.user}
+        addLike={() => like(blog.id)}
+        addComment={() => addComment(blog.id)}
+        handelCommentChange={handelCommentChange}
+        comments={comments}
+      />
     )
 
   }
@@ -189,47 +186,46 @@ const App = () => {
   return (
     <Router>
       <div className="container">
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-          <Nav.Link href="#" as="span">
-        <Link style={padding} to="/blogs">blogs</Link>
-        </Nav.Link>
-        <Nav.Link href="#" as="span">
-        <Link style={padding} to="/users">users</Link> 
-        </Nav.Link>
-        <p style={padding}> {user.name} logged in  </p>
-        <Nav.Link href="#" as="span">
-        <button onClick={() => handleLogout()}>logout</button>
-        </Nav.Link>
-        </Nav>
-      </Navbar.Collapse>
-      </Navbar>
-      <h1>Blog app</h1>  
-      <Notification />
-      <Switch>
-      <Route path="/users/:id">
-        <Blogs users={users} />
-      </Route>
-      <Route path="/blogs/:id">
-        <CertainBlog />
-      </Route>
-      <Route path="/blogs">
-      <br></br>
-      <h2>create new</h2>
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <BlogForm addBlog={addBlog} newTitle={newTitle}
-          newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
-      </Togglable>
-      <Blog blogs={blogs}/>
-      </Route>
-      <Route path="/users">
-        <UserList users={users} />
-      </Route>
-    </Switch>
-    </div>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/blogs">blogs</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/users">users</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <button onClick={() => handleLogout()}>logout</button>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <h1>Blog app</h1>
+        <Notification />
+        <Switch>
+          <Route path="/users/:id">
+            <BlogsList users={users} />
+          </Route>
+          <Route path="/blogs/:id">
+            <CertainBlog />
+          </Route>
+          <Route path="/blogs">
+            <br></br>
+            <h2>create new</h2>
+            <Togglable buttonLabel='new blog' ref={blogFormRef}>
+              <BlogForm addBlog={addBlog} newTitle={newTitle}
+                newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
+                handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
+            </Togglable>
+            <Blog blogs={blogs}/>
+          </Route>
+          <Route path="/users">
+            <UserList users={users} />
+          </Route>
+        </Switch>
+      </div>
     </Router>
   )
 }
