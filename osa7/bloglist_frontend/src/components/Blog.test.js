@@ -3,68 +3,68 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-describe('rendering tests', () => {    
-    
-    let component
+describe('rendering tests', () => {
 
-    const user = {
-        "token": "helintoken",
-        "username": "heli",
-        "name": "heli"
-    }
+  let component
 
-    const blog = {
-        title: "kuusi",
-        author: "aistia",
-        url: 'kuusiaistia.fi', 
-        likes: 6,
-        user: user
-      }
+  const user = {
+    'token': 'helintoken',
+    'username': 'heli',
+    'name': 'heli'
+  }
 
-      const mockHandler = jest.fn()
+  const blog = {
+    title: 'kuusi',
+    author: 'aistia',
+    url: 'kuusiaistia.fi',
+    likes: 6,
+    user: user
+  }
 
-beforeEach(() => {
+  const mockHandler = jest.fn()
 
-      component = render(
-        <Blog blog={blog} addLike={mockHandler} />
+  beforeEach(() => {
 
-      )
+    component = render(
+      <Blog blog={blog} addLike={mockHandler} />
 
-      component.debug()
-    })
+    )
 
-    test('renders content', () => {
-        expect(component.container).toHaveTextContent(
-          'kuusi'
-        )
-        
-        const url = component.container.querySelector('url')
-        const likes = component.container.querySelector('likes')
+    component.debug()
+  })
 
-        expect(url).toBe(null)
-        expect(likes).toBe(null)
-    })
-  
-    test('renders all data when view is clicked', () => {
-      const button = component.getByText('view')
-      fireEvent.click(button)
-      
-      const ta = component.container.querySelector('#blogTa')
-      const url = component.container.querySelector('#url')
-      const likes = component.container.querySelector('#likes')
+  test('renders content', () => {
+    expect(component.container).toHaveTextContent(
+      'kuusi'
+    )
 
-      expect (ta).toBeDefined()
-      expect(url).toBeDefined()
-      expect(likes).toBeDefined()
-      
-    })
+    const url = component.container.querySelector('url')
+    const likes = component.container.querySelector('likes')
 
-    test('clicking like twice', () => {
-        const button = component.getByText('like')
-        fireEvent.click(button)
-        fireEvent.click(button)
+    expect(url).toBe(null)
+    expect(likes).toBe(null)
+  })
 
-        expect(mockHandler.mock.calls.length).toBe(2)
-    })
-  
+  test('renders all data when view is clicked', () => {
+    const button = component.getByText('view')
+    fireEvent.click(button)
+
+    const ta = component.container.querySelector('#blogTa')
+    const url = component.container.querySelector('#url')
+    const likes = component.container.querySelector('#likes')
+
+    expect (ta).toBeDefined()
+    expect(url).toBeDefined()
+    expect(likes).toBeDefined()
+
+  })
+
+  test('clicking like twice', () => {
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(mockHandler.mock.calls.length).toBe(2)
+  })
+
 })

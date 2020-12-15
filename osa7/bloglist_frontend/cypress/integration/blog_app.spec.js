@@ -1,13 +1,13 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')      
+    cy.request('POST', 'http://localhost:3003/api/testing/reset')
     cy.visit('http://localhost:3003')
-    const user = {          
-       username: 'test',  
-       name: 'test',    
-       password: 'test'    
-      }    
-    cy.request('POST', 'http://localhost:3003/api/users/', user) 
+    const user = {
+      username: 'test',
+      name: 'test',
+      password: 'test'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user)
   })
 
   it('Login form is shown', function() {
@@ -50,8 +50,8 @@ describe('Blog app', function() {
       cy.contains('new')
       cy.contains('blog')
 
-      
+
     })
-    
+
   })
 })

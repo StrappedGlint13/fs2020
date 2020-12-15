@@ -8,5 +8,5 @@ const store_1 = store()
 
 
 ReactDOM.render( <Provider store={store_1}>
-    <App />
-    </Provider>, document.getElementById('root'))
+  <App />
+</Provider>, document.getElementById('root'))
