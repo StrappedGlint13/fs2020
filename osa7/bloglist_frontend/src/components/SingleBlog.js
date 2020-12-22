@@ -1,8 +1,7 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
-import Comment from './Comment'
 
-const SingleBlog = ({ blog, user, addLike, addComment, comments, handelCommentChange }) => {
+const SingleBlog = ({ blog, user, addLike }) => {
 
   if (!blog) {
     return null
@@ -11,7 +10,6 @@ const SingleBlog = ({ blog, user, addLike, addComment, comments, handelCommentCh
   if (!user) {
     return null
   }
-
   return (
     <div>
       <h2>{blog.title} {blog.author}</h2>
@@ -28,8 +26,13 @@ const SingleBlog = ({ blog, user, addLike, addComment, comments, handelCommentCh
           </tr>
         </tbody>
       </Table>
-      <Comment addComment={addComment} comments={comments}
-        handelCommentChange={handelCommentChange}/>
+      <div>
+        <h3>Comments</h3>
+        {blog.comments
+          .map(c =>
+            <li key={c.id}>{c.comment}
+            </li>)}
+      </div>
     </div>
 
   )}
