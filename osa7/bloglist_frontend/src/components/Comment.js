@@ -3,19 +3,19 @@ import React from 'react'
 const Comment = ({
   addComment,
   comments,
-  handelCommentChange
+  handleCommentChange
 }) =>
   <form onSubmit={addComment}>
     <div>
       <input id={'comments'} value={comments}
-        onChange={handelCommentChange} />
+        onChange={handleCommentChange} />
       <button id={'comment-button'} type="submit">create</button>
     </div>
 
     <div>
       <h3>comments</h3>
-      {comments.map(comment => <li key={comment}>
-        {comment}
+      {comments.map(c => <li key={c}>
+        {c.comment}
       </li>
       )}
 

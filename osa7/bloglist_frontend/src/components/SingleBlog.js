@@ -2,7 +2,6 @@ import React from 'react'
 import { Table } from 'react-bootstrap'
 
 const SingleBlog = ({ blog, user, addLike }) => {
-
   if (!blog) {
     return null
   }
@@ -34,7 +33,8 @@ const SingleBlog = ({ blog, user, addLike }) => {
             </li>)}
       </div>
     </div>
-
   )}
+/*<Comment addComment={addComment} comments={blog.comments} handleCommentChange={handleCommentChange} >
+      </Comment>*/
 
 export default SingleBlog

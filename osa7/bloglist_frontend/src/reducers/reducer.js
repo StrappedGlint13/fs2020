@@ -2,6 +2,7 @@
 import blogService from '../services/blogService'
 
 const reducer = (state = [], action) => {
+  console.log('action type: ' + JSON.stringify(action.data))
   switch (action.type) {
   case 'NEW_BLOG':
     return [...state, action.data]
@@ -13,9 +14,12 @@ const reducer = (state = [], action) => {
     }
     return state.map(like => like.id !== id? like : changedBlog)
   case 'SET_COMMENT':
-    const addedComment = action.data
-    return state.map(comment => comment.id !== addedComment.id ?
-      comment : addedComment)
+    const id_comment = action.data.id
+    const blog = state.find(n => n.id === id_comment)
+    const commentedBlog = {
+      ...blog, comments: blog.comments.concat(action.data.comment)
+    }
+    return state.map(comment => comment.id !== id_comment? comment : commentedBlog)
   case 'REMOVE_BLOG':
     const deletedId = action.data
     console.log(deletedId)

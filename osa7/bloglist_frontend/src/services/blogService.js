@@ -22,7 +22,7 @@ const update = (id, newObject) => {
 }
 
 const comment = (id, comment) => {
-  const request = axios.post(`${baseUrl}/${id}/comments`,comment, token)
+  const request = axios.post(`${baseUrl}/${id}/comments`, comment, token)
   return request.then(response => response.data)
 }
 
