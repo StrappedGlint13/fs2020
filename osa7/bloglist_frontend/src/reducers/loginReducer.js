@@ -3,8 +3,6 @@ import blogService from '../services/blogService'
 import { setError } from '../reducers/notiReducer'
 
 const userReducer = (state = null, action) => {
-  console.log('state: ' + JSON.stringify(state))
-  console.log('action: ' + JSON.stringify(action))
   switch (action.type) {
   case 'LOGIN':
     return action.data

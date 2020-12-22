@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Error from './components/Error.js'
 import UserList from './components/UserList'
 import BlogsList from './components/BlogsList'
 import './App.css'
@@ -16,18 +15,19 @@ import {
   Switch, Route, Link, useParams
 } from 'react-router-dom'
 import SingleBlog from './components/SingleBlog'
-import { Navbar, Nav } from 'react-bootstrap'
-import { setLogin, setLogout } from './reducers/loginReducer'
+import { Navbar, Nav, Button } from 'react-bootstrap'
+import { setLogout } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/usersReducer'
+import { Page } from './components/Styled-Components'
+import LoginForm from './components/LoginForm'
+import AppFooter from './components/AppFooter'
 
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState('')
   const blogFormRef= useRef()
 
   const padding = {
@@ -93,15 +93,10 @@ const App = () => {
     }
 
     const blog = blogs.find(n => n.id === id)
-    const changedBlog = { ...blog, comments: blog.setComments(comment) }
+    const changedBlog = { ...blog, comments: blog.comments.concat(comment) }
     dispatch(setComment(id, changedBlog))
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    dispatch(setLogin({ username, password }))
-    dispatch(setNotification(`Welcome ${username}`, 5))
-  }
   const like = (id) => {
     const blog = blogs.find(n => n.id === id)
     const changedBlog = { ...blog, likes: blog.likes + 1 }
@@ -110,7 +105,7 @@ const App = () => {
     dispatch(setNotification(`a like added for '${blog.title}'`, 5))
   }
 
-  const handelCommentChange = (event) => {
+  const handleCommentChange = (event) => {
     setComments(event.target.value)
   }
 
@@ -132,37 +127,6 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
   }
 
-  if (user === null)  {
-    return (
-      <div>
-        <Error />
-        <h2>Log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-          username
-            <input
-              id='username'
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-          password
-            <input
-              id='password'
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button id="login-button" type="submit">login</button>
-        </form>
-      </div>
-    )
-  }
-
   const CertainBlog = () => {
     const id = useParams().id
     const blog = blogs.find(n => n.id === id)
@@ -175,57 +139,64 @@ const App = () => {
       <SingleBlog blog={blog} user={blog.user}
         addLike={() => like(blog.id)}
         addComment={() => addComment(blog.id)}
-        handelCommentChange={handelCommentChange}
+        handleCommentChange={handleCommentChange}
         comments={comments}
       />
     )
 
   }
 
+  if (user === null)  {
+    return (<LoginForm />)
+  }
+
   return (
-    <Router>
-      <div className="container">
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link href="#" as="span">
-                <Link style={padding} to="/blogs">blogs</Link>
-              </Nav.Link>
-              <Nav.Link href="#" as="span">
-                <Link style={padding} to="/users">users</Link>
-              </Nav.Link>
-              <Nav.Link href="#" as="span">
-                <button onClick={() => handleLogout()}>logout</button>
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <h1>Blog app</h1>
-        <Notification />
-        <Switch>
-          <Route path="/users/:id">
-            <BlogsList users={users} />
-          </Route>
-          <Route path="/blogs/:id">
-            <CertainBlog />
-          </Route>
-          <Route path="/blogs">
-            <br></br>
-            <h2>create new</h2>
-            <Togglable buttonLabel='new blog' ref={blogFormRef}>
-              <BlogForm addBlog={addBlog} newTitle={newTitle}
-                newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
-                handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
-            </Togglable>
-            <Blog blogs={blogs}/>
-          </Route>
-          <Route path="/users">
-            <UserList users={users} />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <Page>
+      <Router>
+        <div className="container">
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="mr-auto">
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/blogs">blogs</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/users">users</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Button onClick={() => handleLogout()}>logout</Button>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <h1>Blog app</h1>
+          <Notification />
+          <Switch>
+            <Route path="/users/:id">
+              <BlogsList users={users} />
+            </Route>
+            <Route path="/blogs/:id">
+              <CertainBlog />
+            </Route>
+            <Route path="/blogs">
+              <br></br>
+              <h2>Create new</h2>
+              <Togglable buttonLabel='new blog' ref={blogFormRef}>
+                <BlogForm addBlog={addBlog} newTitle={newTitle}
+                  newAuthor={newAuthor} newUrl={newUrl} handleTitleChange={handleTitleChange}
+                  handleAuthorChange={handleAuthorChange} handleUrlChange={handleUrlChange} />
+              </Togglable>
+              <Blog blogs={blogs}/>
+            </Route>
+            <Route path="/users">
+              <UserList users={users} />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+      <AppFooter />
+    </Page>
   )
 }
 

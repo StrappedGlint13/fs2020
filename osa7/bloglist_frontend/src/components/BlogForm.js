@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Input, Button } from './Styled-Components'
 
 const BlogForm = ({
   addBlog,
@@ -12,20 +13,20 @@ const BlogForm = ({
 }) =>
   <form onSubmit={addBlog}>
     <div>
-  title: <input id={'title'} value={newTitle}
+  title: <Input id={'title'} value={newTitle}
         onChange={handleTitleChange} />
     </div>
     <div>
-  author: <input id={'author'} value={newAuthor}
+  author: <Input id={'author'} value={newAuthor}
         onChange={handleAuthorChange} />
     </div>
     <div>
       <div>
-  url: <input id={'url'} value={newUrl}
+  url: <Input id={'url'} value={newUrl}
           onChange={handleUrlChange} />
       </div>
       <div></div>
-      <button id={'create-button'} type="submit">create</button>
+      <Button id={'create-button'} type="submit">Create</Button>
     </div>
   </form>
 
