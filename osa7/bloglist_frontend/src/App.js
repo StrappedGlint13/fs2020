@@ -92,7 +92,6 @@ const App = () => {
       comment: comment,
     }
 
-
     const blog = blogs.find(n => n.id === id)
     const changedBlog = { ...blog, comments: blog.setComments(comment) }
     dispatch(setComment(id, changedBlog))
