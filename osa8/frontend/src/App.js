@@ -9,7 +9,7 @@ const App = () => {
 
   const notify = (message) => {    
     console.log(message)
-    setErrorMessage(message.error.graphQLErrors.message)    
+    setErrorMessage(message.error)    
     setTimeout(() => {      
       setErrorMessage(null)    
     }, 10000)  

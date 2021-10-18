@@ -4,9 +4,11 @@ import React from 'react'
 import { ALL_BOOKS } from '../queries'
 
 const Books = ({ show }) => {
-  const result = useQuery(ALL_BOOKS, {
+  const result = useQuery(ALL_BOOKS)
+
+  /*, {
     pollInterval: 2000
-  })
+  } */
   
   if (result.loading) {
     return <div>loading...</div>
