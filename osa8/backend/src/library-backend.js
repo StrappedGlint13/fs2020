@@ -141,54 +141,59 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      if (!args.author && !args.genre) {
-        return await Book.find({})
+      if (args.genre) {
+        return Book.find( { genres: { $in: args.genre } })
       }
-
-      if (!args.author && args.genre) {
-        return books.filter(b => b.genres.includes(args.genre))
-      }
-
-      if (args.author && !args.genre) {
-        return books.filter(b => b.author === args.author)
-      }
-
-    return books.filter(b => (b.author === args.author) && 
-    b.genres.includes(args.genre)) 
+    const books = Book.find({})
+    return books
     },
     allAuthors: async () => {
       return Author.find({})
     },
   },
   Author: {
-    bookCount: (root) => {
-      return books.filter(b => b.author === root.name).length
-    }
+    bookCount: async (root) => {
+      return Book.find( { author: { $in: root._id } } ).countDocuments()
+    },
   },
 
   Mutation: {
-    editAuthor: (root, args) => {
-      const updatedAuthor = authors.find(a => a.name === args.name)
-      if (updatedAuthor === undefined) {
-          return null
+    editAuthor: async (root, args) => {
+      console.log(args)
+      const author = await Author.findOne({ name: args.name })
+      if (author === null) {
+        return null
       }
-        
-      updatedAuthor['born'] = args.setBornTo
-      return updatedAuthor
+      author.born = args.setBornTo  
+      try {
+        return await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
     }, 
     addBook: async (root, args) => {
-      const person = await Author.findOne({ name: args.author }) 
-
-      if (person === null) {
+      console.log(args)
+      const isAuthor = await Author.findOne({ name: args.author }) 
+      
+      if (isAuthor === null) {
         const author = new Author({
           name: args.author,
-          id: uuid(),
           born: null,
         })
         await author.save()
+        const book = new Book({ ...args, author: author })
+        
+        return await book.save()
       }
-      const book = new Book({ ...args, author: person })
-      return await book.save()
+      const book = new Book({ ...args, author: isAuthor })
+      try {
+        return book.save()
+      } catch (error) {
+        // console.log(error)
+      }
+      return book
     }
   }
 }
