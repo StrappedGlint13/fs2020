@@ -144,8 +144,8 @@ const resolvers = {
       if (args.genre) {
         return Book.find( { genres: { $in: args.genre } })
       }
-    const books = Book.find({})
-    return books
+
+    return Book.find({})
     },
     allAuthors: async () => {
       return Author.find({})
@@ -159,7 +159,6 @@ const resolvers = {
 
   Mutation: {
     editAuthor: async (root, args) => {
-      console.log(args)
       const author = await Author.findOne({ name: args.name })
       if (author === null) {
         return null
@@ -174,7 +173,6 @@ const resolvers = {
       }
     }, 
     addBook: async (root, args) => {
-      console.log(args)
       const isAuthor = await Author.findOne({ name: args.author }) 
       
       if (isAuthor === null) {
@@ -182,16 +180,24 @@ const resolvers = {
           name: args.author,
           born: null,
         })
-        await author.save()
-        const book = new Book({ ...args, author: author })
-        
-        return await book.save()
+        try {
+          await author.save()
+          const book = new Book({ ...args, author: author })
+          return await book.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
+       
       }
       const book = new Book({ ...args, author: isAuthor })
       try {
         return book.save()
       } catch (error) {
-        // console.log(error)
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
       return book
     }
