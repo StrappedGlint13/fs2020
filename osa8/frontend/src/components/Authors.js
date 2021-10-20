@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ALL_AUTHORS, EDIT_AUTHOR, ALL_BOOKS } from '../queries'
 import Select from 'react-select';
 
@@ -7,8 +7,6 @@ const Authors = ({ show }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   
-
-  useEffect(() => console.log(name.value))
   
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
