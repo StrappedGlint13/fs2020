@@ -3,14 +3,17 @@ import React, { useState } from 'react'
 import { ALL_AUTHORS, EDIT_AUTHOR, ALL_BOOKS } from '../queries'
 import Select from 'react-select';
 
-const Authors = ({ show }) => {
+const Authors = ({ show, setError }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   
   
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ]
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS} ],
+    onError: (error) => {
+      setError([error][0].message)
+    }
   })
   
   const result = useQuery(ALL_AUTHORS)

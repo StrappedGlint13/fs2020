@@ -3,8 +3,12 @@ import { useQuery } from '@apollo/client'
 import React from 'react'
 import { ALL_BOOKS } from '../queries'
 
-const Books = ({ show }) => {
-  const result = useQuery(ALL_BOOKS)
+const Books = ({ show, setError }) => {
+  const result = useQuery(ALL_BOOKS, {
+    onError: (error) => {
+      setError([error][0].message)
+    }
+  })
 
 /**, {
     pollInterval: 2000
