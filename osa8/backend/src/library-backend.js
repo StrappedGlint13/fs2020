@@ -107,9 +107,9 @@ let books = [
 
 const typeDefs = gql`
   type Author {
-    name: String!
+    name: String
     id: ID!
-    born: String
+    born: Int
     bookCount: Int!
   }
 
@@ -132,6 +132,8 @@ const typeDefs = gql`
   }
 
   type Query {
+    name: String!
+    born: Int
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
@@ -162,7 +164,6 @@ const typeDefs = gql`
 `
 const resolvers = {
   Query: {
-    bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if (args.genre) {
@@ -181,6 +182,14 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {
       return Book.find( { author: { $in: root._id } } ).countDocuments()
+    },
+    name: async (root) => {
+      const author = await Author.findById(root)
+      return author.name
+    },
+    born: async (root) => {
+      const author = await Author.findById(root)
+      return author.born
     },
   },
 
