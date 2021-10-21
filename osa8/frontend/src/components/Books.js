@@ -5,6 +5,7 @@ import { ALL_BOOKS, GENRE_FILTER } from '../queries'
 import GenreSelection from './GenreSelection'
 
 const Books = ({ show, setError }) => {
+  const [text, setText] = useState('All genres')
   const [genre, setGenre] = useState(null)
   const [getGenre, res]  = useLazyQuery(GENRE_FILTER, {
     onError: (error) => {
@@ -19,7 +20,6 @@ const Books = ({ show, setError }) => {
   })
 
   useEffect(() => {
-    console.log(res.data)
     if (res.data) {
       setGenre(res.data.allBooks)
     }
@@ -34,7 +34,9 @@ const Books = ({ show, setError }) => {
   }
 
   const showGenre = (genre) => {    
-    getGenre({ variables: { genre: genre } })  
+    setText(genre) 
+    getGenre({ variables: { genre: genre } }) 
+    
   }
 
   const books = result.data.allBooks
@@ -42,6 +44,8 @@ const Books = ({ show, setError }) => {
   return (
     <div>
       <h2>Books</h2>
+      {genre ? <p> in genre <b>{text}</b> </p> : <p> All genres </p>}
+      {console.log(genre)}
       <table>
         <tbody>
           <tr>
