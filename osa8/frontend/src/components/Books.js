@@ -1,19 +1,29 @@
 
-import { useQuery } from '@apollo/client'
-import React from 'react'
-import { ALL_BOOKS } from '../queries'
+import { useQuery, useLazyQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
+import { ALL_BOOKS, GENRE_FILTER } from '../queries'
+import GenreSelection from './GenreSelection'
 
 const Books = ({ show, setError }) => {
+  const [genre, setGenre] = useState(null)
+  const [getGenre, res]  = useLazyQuery(GENRE_FILTER, {
+    onError: (error) => {
+      setError([error][0].message)
+    }
+  })
+  
   const result = useQuery(ALL_BOOKS, {
     onError: (error) => {
       setError([error][0].message)
     }
   })
 
-/**, {
-    pollInterval: 2000
-  })
-   */
+  useEffect(() => {
+    console.log(res.data)
+    if (res.data) {
+      setGenre(res.data.allBooks)
+    }
+  }, [res])
   
   if (result.loading) {
     return <div>loading...</div>
@@ -22,14 +32,16 @@ const Books = ({ show, setError }) => {
   if (!show) {
     return null
   }
-  console.log(result.data.allBooks)
+
+  const showGenre = (genre) => {    
+    getGenre({ variables: { genre: genre } })  
+  }
+
   const books = result.data.allBooks
- 
 
   return (
     <div>
-      <h2>books</h2>
-
+      <h2>Books</h2>
       <table>
         <tbody>
           <tr>
@@ -41,7 +53,13 @@ const Books = ({ show, setError }) => {
               published
             </th>
           </tr>
-          {books.map(a =>
+          {genre ? genre.map(a =>
+            <tr key={a.title}>
+              <td>{a.title}</td>
+              <td>{a.author.name}</td>
+              <td>{a.published}</td>
+            </tr>
+          ) : books.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -50,6 +68,8 @@ const Books = ({ show, setError }) => {
           )}
         </tbody>
       </table>
+      <GenreSelection books={books} showGenre={showGenre} 
+      setGenre={setGenre} />
     </div>
   )
 }
