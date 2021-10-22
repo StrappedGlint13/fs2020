@@ -12,7 +12,7 @@ const Books = ({ show, setError }) => {
       setError([error][0].message)
     }
   })
-  
+
   const result = useQuery(ALL_BOOKS, {
     onError: (error) => {
       setError([error][0].message)
@@ -45,7 +45,6 @@ const Books = ({ show, setError }) => {
     <div>
       <h2>Books</h2>
       {genre ? <p> in genre <b>{text}</b> </p> : <p> All genres </p>}
-      {console.log(genre)}
       <table>
         <tbody>
           <tr>

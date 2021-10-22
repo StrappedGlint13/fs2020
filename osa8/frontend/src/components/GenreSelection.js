@@ -5,7 +5,7 @@ const GenreSelection = ( { books, showGenre, setGenre } ) => {
     let allGenres = []
     allGenres = books.flatMap(a => [...allGenres, ...a.genres])
     allGenres = allGenres.filter((item, i) => allGenres.indexOf(item) === i)
-    
+
     return (
       <div>
         <h2>Genres</h2>
@@ -15,6 +15,7 @@ const GenreSelection = ( { books, showGenre, setGenre } ) => {
           </button> 
           )}
          <button onClick={() => setGenre(null)}> All genres </button>
+        
       </div>
     )
   }
