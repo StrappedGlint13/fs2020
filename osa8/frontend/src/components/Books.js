@@ -1,19 +1,13 @@
 
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { ALL_BOOKS, GENRE_FILTER } from '../queries'
+import { GENRE_FILTER } from '../queries'
 import GenreSelection from './GenreSelection'
 
-const Books = ({ show, setError }) => {
+const Books = ({ show, setError, books }) => {
   const [text, setText] = useState('All genres')
   const [genre, setGenre] = useState(null)
   const [getGenre, res]  = useLazyQuery(GENRE_FILTER, {
-    onError: (error) => {
-      setError([error][0].message)
-    }
-  })
-
-  const result = useQuery(ALL_BOOKS, {
     onError: (error) => {
       setError([error][0].message)
     }
@@ -24,10 +18,6 @@ const Books = ({ show, setError }) => {
       setGenre(res.data.allBooks)
     }
   }, [res])
-  
-  if (result.loading) {
-    return <div>loading...</div>
-  }
 
   if (!show) {
     return null
@@ -38,8 +28,6 @@ const Books = ({ show, setError }) => {
     getGenre({ variables: { genre: genre } }) 
     
   }
-
-  const books = result.data.allBooks
 
   return (
     <div>
