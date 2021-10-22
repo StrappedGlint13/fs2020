@@ -10,8 +10,8 @@ const GenreSelection = ( { books, showGenre, setGenre } ) => {
       <div>
         <h2>Genres</h2>
         {allGenres.map(g => 
-          <button onClick={() => showGenre(g)}> 
-          {g}    
+          <button key={g} onClick={() => showGenre(g)}> 
+            {g} 
           </button> 
           )}
          <button onClick={() => setGenre(null)}> All genres </button>
