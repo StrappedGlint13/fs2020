@@ -37,8 +37,9 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log( { subscriptionData } )
-      window.alert('Book added successfully!')
+      const title = subscriptionData.data.bookAdded.title
+      const author = subscriptionData.data.bookAdded.author.name
+      notify(`Book added: ${title} by ${author}`)
     }
   })
 
