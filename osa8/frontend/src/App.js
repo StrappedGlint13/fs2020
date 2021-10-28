@@ -4,19 +4,13 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
-import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
-import { ALL_BOOKS, BOOK_ADDED } from './queries'
+import { useApolloClient, useSubscription } from '@apollo/client'
+import { BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
-  
-  const result = useQuery(ALL_BOOKS, {
-    onError: (error) => {
-      notify([error][0].message)
-    }
-  })
 
   const client = useApolloClient()
 
@@ -55,8 +49,6 @@ const App = () => {
       </div>
     )
   }
-  
-  const books = result.data.allBooks
 
   return (
     <div>
@@ -71,7 +63,7 @@ const App = () => {
       <Authors show={page === 'authors'} setError={notify}
       />
       <Books
-        show={page === 'books'} setError={notify} books={books}
+        show={page === 'books'} setError={notify}
       />
       <NewBook
         show={page === 'add'} setError={notify}
