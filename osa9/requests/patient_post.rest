@@ -1,25 +1,22 @@
-POST http://localhost:3001/api/patients
+POST http://localhost:3001/api/patients/d2773c6e-f723-11e9-8f0b-362b9e155667
 Content-Type: application/json
 
 {
-  "name": "Matti",
-  "dateOfBirth": "1992-01-10",
-  "ssn": "192929",
-  "gender": "male",
-  "occupation": "bad",
-  "entries": [
+  "entry": [
       {
-        "id": "d811e46d-70b3-4d90-b090-4535c7cf8fb1",
         "date": "2015-01-02",
         "type": "OccupationalHealthcare",
         "specialist": "MD House",
         "diagnosisCodes": ["S62.5"],
         "description":
           "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
-        "discharge": {
-          "date": "2015-01-16",
-          "criteria": "Thumb has healed."
+        "employerName": "UNI",
+        "sickLeave": 
+        {
+          "startDate": "2019-01-09",
+          "endDate": "2080-01-09"
         }
       }
+      
     ]
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, addLike, removeBlog }) => {
+export const Blog = ({ blog, addLike, removeBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,

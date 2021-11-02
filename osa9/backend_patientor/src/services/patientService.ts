@@ -1,6 +1,6 @@
 import patientsData from '../../data/patients'
 
-import { NewPatientEntry, Patient, PublicPatient } from '../types';
+import { CompinedEntry, NewPatientEntry, Patient, PublicPatient } from '../types';
 
 const patients: Array<Patient> = patientsData;
 
@@ -28,17 +28,28 @@ const findById = (id: string): Patient | undefined => {
   return entry;
 }
 
-
-
 const generateId = () => {
-	return Math.floor(Math.random() * 123456789987654321)
+	return Math.floor(Math.random() * 1234567899999999999)
+}
+
+export const addEntry = (patient: Patient, entry: CompinedEntry): CompinedEntry => {
+  const newEntry = {
+    ...entry,
+    id: generateId(),
   }
+  
+   patient.entries.push(entry)
+   return newEntry
+   
+}
+
 
 const addPatient = ( entry: NewPatientEntry): Patient => {
     const newPatientEntry = {
-        id: generateId(),
-        ...entry
-    };
+      ...entry,  
+      id: generateId(),
+        
+};
 
 patients.push(newPatientEntry);
 return newPatientEntry;

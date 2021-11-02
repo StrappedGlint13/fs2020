@@ -66,10 +66,11 @@ const handleFilterChange = (event) => {
 }
 
 const handleClick = (name) => {
+  console.log(name)
   setFilter(name)
 }
 
-
+console.log(filter)
   return (
     <div>
       <Filter filter={filter} handle={handleFilterChange} />

@@ -27,19 +27,19 @@ export interface Patient {
 }
 
 interface BaseEntry {
-    id: string;
+    id: any;
     description: string;
     date: string;
     specialist: string;
     diagnosisCodes?: Array<DiagnoseEntry['code']>;
  }
 
-interface sickLeave {
+export interface sickLeave {
      startDate: string,
      endDate: string
 }
 
-interface discharge {
+export interface Discharge {
     date: string
     criteria: string
 }
@@ -57,11 +57,16 @@ export interface OccupationalHealthCareEntry extends BaseEntry {
 
 export interface HospitalEntry extends BaseEntry {
     type: Type | string
-    discharge: discharge
+    discharge: Discharge
  }
 
-export type Entry = OccupationalHealthCareEntry | HospitalEntry | HealthCheck
+export type Entry = Omit<OccupationalHealthCareEntry | HospitalEntry | HealthCheck | CompinedEntry, 'id'>
+
+export type NewBaseEntry = Omit<BaseEntry, 'id'>
+export type toHealthCheck = Omit<HealthCheck, 'id'>
+export type toOccupational = Omit<OccupationalHealthCareEntry, 'id'>
+export type toHospital = Omit<HospitalEntry, 'id'>
+export type CompinedEntry = toHealthCheck | toOccupational | toHospital
 
 export type NewPatientEntry = Omit<Patient, 'id'>;
-
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>
